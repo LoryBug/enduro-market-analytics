@@ -31,6 +31,12 @@ desktop.ini
 *.temp
 ~$*
 
+# Generated datasets and intermediate preparation files
+data/processed/
+data/raw/age_km_preparation_summary.csv
+data/raw/enduro_listings_monthly_prepared.csv
+data/raw/enduro_listings_prepared.csv
+
 # Local environment variables
 .env
 .env.*
