@@ -5,8 +5,9 @@ from pathlib import Path
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-RAW_CURRENT = PROJECT_ROOT / "data" / "raw" / "enduro_listings_raw.csv"
-RAW_PREPARED = PROJECT_ROOT / "data" / "raw" / "enduro_listings_prepared.csv"
+sys.path.insert(0, str(PROJECT_ROOT))
+
+from src.config import RAW_LISTINGS, RAW_PREPARED_LISTINGS
 
 PIPELINE_STEPS = [
     "scripts/00_prepare_monthly_dataset.py",
@@ -30,8 +31,11 @@ def main():
     for step in PIPELINE_STEPS[:2]:
         run_step(step)
 
-    shutil.copyfile(RAW_PREPARED, RAW_CURRENT)
-    print(f"\n==> copied {RAW_PREPARED.relative_to(PROJECT_ROOT)} -> {RAW_CURRENT.relative_to(PROJECT_ROOT)}", flush=True)
+    shutil.copyfile(RAW_PREPARED_LISTINGS, RAW_LISTINGS)
+    print(
+        f"\n==> copied {RAW_PREPARED_LISTINGS.relative_to(PROJECT_ROOT)} -> {RAW_LISTINGS.relative_to(PROJECT_ROOT)}",
+        flush=True,
+    )
 
     for step in PIPELINE_STEPS[2:]:
         run_step(step)

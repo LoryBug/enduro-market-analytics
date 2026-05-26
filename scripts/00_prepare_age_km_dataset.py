@@ -7,13 +7,18 @@ import pandas as pd
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.config import DATA_RAW, MIN_CLUSTER_COUNT
+from src.config import (
+    AGE_KM_PREPARATION_SUMMARY,
+    MIN_CLUSTER_COUNT,
+    RAW_MONTHLY_PREPARED_LISTINGS,
+    RAW_PREPARED_LISTINGS,
+)
 from src.preprocessing import clean_listings
 from src.segments import add_age_km_bands, filter_core_market
 
 
-INPUT_PATH = DATA_RAW / "enduro_listings_monthly_prepared.csv"
-OUTPUT_PATH = DATA_RAW / "enduro_listings_prepared.csv"
+INPUT_PATH = RAW_MONTHLY_PREPARED_LISTINGS
+OUTPUT_PATH = RAW_PREPARED_LISTINGS
 RANDOM_SEED = 2027
 
 AGE_BANDS = {
@@ -111,14 +116,14 @@ def main():
     output.to_csv(OUTPUT_PATH, index=False)
 
     coverage = pd.DataFrame(coverage_rows)
-    coverage.to_csv(DATA_RAW / "age_km_preparation_summary.csv", index=False)
+    coverage.to_csv(AGE_KM_PREPARATION_SUMMARY, index=False)
 
     print(f"Input rows: {len(raw)}")
     print(f"Prepared age/km rows added: {len(prepared_rows)}")
     print(f"Output rows: {len(output)}")
     print(coverage.to_string(index=False))
     print(f"Saved: {OUTPUT_PATH}")
-    print(f"Saved: {DATA_RAW / 'age_km_preparation_summary.csv'}")
+    print(f"Saved: {AGE_KM_PREPARATION_SUMMARY}")
 
 
 if __name__ == "__main__":

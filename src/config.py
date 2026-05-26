@@ -8,9 +8,14 @@ OUTPUT_FIGURES = PROJECT_ROOT / "outputs" / "figures"
 OUTPUT_TABLES = PROJECT_ROOT / "outputs" / "tables"
 
 RAW_LISTINGS = DATA_RAW / "enduro_listings_raw.csv"
+RAW_WAYBACK_LISTINGS = DATA_RAW / "enduro_listings_wayback.csv"
+RAW_MONTHLY_PREPARED_LISTINGS = DATA_RAW / "enduro_listings_monthly_prepared.csv"
+RAW_PREPARED_LISTINGS = DATA_RAW / "enduro_listings_prepared.csv"
+AGE_KM_PREPARATION_SUMMARY = DATA_RAW / "age_km_preparation_summary.csv"
 PROCESSED_LISTINGS = DATA_PROCESSED / "enduro_listings_clean.csv"
 WEEKLY_SERIES = DATA_PROCESSED / "weekly_market_series.csv"
 MONTHLY_SERIES = DATA_PROCESSED / "monthly_market_series.csv"
+CORE_MONTHLY_SERIES = DATA_PROCESSED / "core_modern_enduro_monthly_series.csv"
 
 CURRENT_YEAR = 2026
 FORECAST_TARGET = "median_price"

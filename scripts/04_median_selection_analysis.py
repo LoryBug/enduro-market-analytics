@@ -7,7 +7,13 @@ import pandas as pd
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.config import DATA_PROCESSED, OUTPUT_FIGURES, OUTPUT_TABLES, PROCESSED_LISTINGS
+from src.config import (
+    CORE_MONTHLY_SERIES,
+    DATA_PROCESSED,
+    OUTPUT_FIGURES,
+    OUTPUT_TABLES,
+    PROCESSED_LISTINGS,
+)
 from src.segments import filter_core_market
 
 
@@ -178,7 +184,7 @@ def save_core_processed_series(monthly):
         "month",
     ]
     DATA_PROCESSED.mkdir(parents=True, exist_ok=True)
-    core[cols].to_csv(DATA_PROCESSED / "core_modern_enduro_monthly_series.csv", index=False)
+    core[cols].to_csv(CORE_MONTHLY_SERIES, index=False)
 
 
 def main():
@@ -198,7 +204,7 @@ def main():
     print(f"Selected core listings: {len(segmented[segmented['selected_segment'] == 'core_modern_enduro_250_500'])}")
     print(f"Saved: {OUTPUT_TABLES / 'selected_monthly_medians.csv'}")
     print(f"Saved: {OUTPUT_TABLES / 'selected_market_summary.csv'}")
-    print(f"Saved: {DATA_PROCESSED / 'core_modern_enduro_monthly_series.csv'}")
+    print(f"Saved: {CORE_MONTHLY_SERIES}")
     print(f"Saved: {OUTPUT_TABLES / 'median_selection_summary.md'}")
     print(f"Saved: {OUTPUT_FIGURES / '07_selected_core_monthly_median.png'}")
 

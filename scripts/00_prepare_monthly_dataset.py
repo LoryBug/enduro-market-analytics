@@ -8,11 +8,11 @@ import pandas as pd
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.config import DATA_RAW
+from src.config import RAW_MONTHLY_PREPARED_LISTINGS, RAW_WAYBACK_LISTINGS
 
 
-INPUT_PATH = DATA_RAW / "enduro_listings_wayback.csv"
-OUTPUT_PATH = DATA_RAW / "enduro_listings_monthly_prepared.csv"
+INPUT_PATH = RAW_WAYBACK_LISTINGS
+OUTPUT_PATH = RAW_MONTHLY_PREPARED_LISTINGS
 MIN_LISTINGS_PER_MONTH = 10
 PREPARED_END_MONTH = "2026-05"
 RANDOM_SEED = 2026
