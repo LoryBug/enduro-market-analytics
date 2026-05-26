@@ -69,8 +69,6 @@ La sequenza principale è:
 
 | Step | Script | Output principale |
 |---|---|---|
-| Preparazione mensile | `00_prepare_monthly_dataset.py` | dataset mensile preparato |
-| Preparazione cluster | `00_prepare_age_km_dataset.py` | dataset finale di lavoro |
 | Preprocessing | `01_preprocess.py` | serie settimanale e mensile |
 | Forecast generale | `02_train_forecasting_models.py` | metriche e predizioni |
 | Raccomandazioni base | `03_buying_period_recommendation.py` | mesi convenienti sul mercato generale |
