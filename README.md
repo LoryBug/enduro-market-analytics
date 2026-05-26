@@ -14,13 +14,15 @@ La parte più solida del progetto è la segmentazione `age/km`: il forecast gene
 
 ## Dataset
 
-Il dataset usato dalla pipeline finale è:
+Il dataset raw principale usato dalla pipeline finale è:
 
 ```text
 data/raw/enduro_listings_raw.csv
 ```
 
 Il dataset raccoglie annunci storici e correnti del mercato enduro. Tutte le osservazioni vengono trattate nello stesso modo durante preprocessing, aggregazione, forecasting e raccomandazione.
+
+La repo mantiene versionati solo i dataset raw principali e gli output finali utili alla consegna. I file in `data/processed/` e i raw intermedi di preparazione vengono rigenerati dalla pipeline e sono ignorati da Git.
 
 ## Pipeline
 
@@ -71,10 +73,11 @@ Settembre 2026 emerge come possibile finestra conveniente per il cluster 3-5 ann
 ## Struttura
 
 ```text
-data/       dataset raw e processed
-scripts/    pipeline eseguibile
-src/        funzioni riutilizzabili per preprocessing, modelli, metriche e plot
-outputs/    tabelle e figure generate
-docs/       note metodologiche
-report/     dashboard HTML finale
+data/raw/        dataset raw principali e sorgenti raccolte
+data/processed/  dataset intermedi rigenerati localmente
+scripts/         pipeline eseguibile
+src/             funzioni riutilizzabili per preprocessing, modelli, metriche e plot
+outputs/         tabelle e figure finali versionate
+docs/            note metodologiche
+report/          dashboard HTML finale
 ```

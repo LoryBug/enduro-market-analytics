@@ -2,7 +2,7 @@
 
 ## Dataset Corrente
 
-Il dataset usato dalla pipeline finale e:
+Il dataset raw principale usato dalla pipeline finale e:
 
 ```text
 data/raw/enduro_listings_raw.csv
@@ -12,8 +12,9 @@ data/raw/enduro_listings_raw.csv
 
 | File | Contenuto | Righe |
 |---|---|---:|
-| `data/raw/enduro_listings_raw.csv` | Dataset di input della pipeline | 1930 |
-| `data/processed/enduro_listings_clean.csv` | Dataset pulito finale | 1891 |
+| `data/raw/enduro_listings_wayback.csv` | Raccolta storica di partenza | 1591 |
+| `data/raw/enduro_listings_raw.csv` | Snapshot raw principale usato dalla pipeline | 1930 |
+| `data/processed/enduro_listings_clean.csv` | Dataset pulito rigenerato localmente | 1891 |
 
 Fonti principali:
 
@@ -21,6 +22,23 @@ Fonti principali:
 - pagine live Moto.it raccolte a maggio 2026.
 
 Tutte le osservazioni vengono trattate nello stesso modo all'interno della pipeline.
+
+## Versionamento
+
+La repo segue una policy intermedia: restano versionati i raw principali, la documentazione, la dashboard e gli output finali in `outputs/`; restano invece fuori da Git i dati intermedi rigenerabili.
+
+File rigenerati e ignorati:
+
+- `data/processed/`
+- `data/raw/enduro_listings_monthly_prepared.csv`
+- `data/raw/enduro_listings_prepared.csv`
+- `data/raw/age_km_preparation_summary.csv`
+
+Per ricrearli:
+
+```bash
+python scripts/run_final_pipeline.py
+```
 
 ## Copertura Temporale
 
