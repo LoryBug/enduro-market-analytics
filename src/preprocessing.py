@@ -19,7 +19,6 @@ REQUIRED_COLUMNS = [
     "is_2stroke",
     "condition_score",
     "has_documents",
-    "url",
 ]
 
 
