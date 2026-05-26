@@ -36,8 +36,8 @@ Motivo: le enduro racing moderne 250-500cc sono il sotto-mercato più omogeneo. 
 | 2026-04-30 00:00:00 |               45 |           6500 |      5700   |      7500   |   6.22222 |
 | 2026-05-31 00:00:00 |              110 |           6000 |      4887.5 |      7400   |   5.2     |
 
-## Interpretàzione
+## Interpretazione
 
-Il progetto può mostrare il mercato completo come contesto, ma dovrebbe usare il segmento core come storia principale di forecasting. La mediana e preferibile alla media perché gli annunci includono outlier, moto d'epoca e cilindrate molto diverse.
+Il progetto può mostrare il mercato completo come contesto, ma dovrebbe usare il segmento core come storia principale di forecasting. La mediana è preferibile alla media perché gli annunci includono outlier, moto d'epoca e cilindrate molto diverse.
 
 Un mese viene considerato affidabile se contiene almeno 10 annunci nel segmento selezionato.

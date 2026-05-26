@@ -146,7 +146,7 @@ def save_markdown_summary(summary, monthly):
         "dataset completo; market_segment = modern; 250cc <= engine_cc <= 500cc; 1000 <= price <= 20000",
         "```",
         "",
-        "Motivo: le enduro racing moderne 250-500cc sono il sotto-mercato piu omogeneo. Le vintage/youngtimer e le 690/701 vengono tenute separate perche seguono dinamiche di prezzo diverse.",
+        "Motivo: le enduro racing moderne 250-500cc sono il sotto-mercato più omogeneo. Le vintage/youngtimer e le 690/701 vengono tenute separate perché seguono dinamiche di prezzo diverse.",
         "",
         "## Riepilogo Segmenti",
         "",
@@ -158,7 +158,7 @@ def save_markdown_summary(summary, monthly):
         "",
         "## Interpretazione",
         "",
-        "Il progetto puo mostrare il mercato completo come contesto, ma dovrebbe usare il segmento core come storia principale di forecasting. La mediana e preferibile alla media perche gli annunci includono outlier, moto d'epoca e cilindrate molto diverse.",
+        "Il progetto può mostrare il mercato completo come contesto, ma dovrebbe usare il segmento core come storia principale di forecasting. La mediana è preferibile alla media perché gli annunci includono outlier, moto d'epoca e cilindrate molto diverse.",
         "",
         f"Un mese viene considerato affidabile se contiene almeno {MIN_LISTINGS_PER_MONTH} annunci nel segmento selezionato.",
     ]

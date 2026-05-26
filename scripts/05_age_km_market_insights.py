@@ -133,12 +133,12 @@ def save_markdown(summary, buying_advice, matrix, count_matrix):
     lines = [
         "# Age And Mileage Market Insights",
         "",
-        "Analisi del segmento `core_modern_enduro_250_500` organizzato per fasce di eta e chilometraggio.",
+        "Analisi del segmento `core_modern_enduro_250_500` organizzato per fasce di età e chilometraggio.",
         "",
         "## Fasce Usate",
         "",
         "- Km: `0-5k`, `5-10k`, `10-15k`, `15k+`",
-        "- Eta: `0-2`, `3-5`, `6-10`, `11-20`, `20+` anni",
+        "- Età: `0-2`, `3-5`, `6-10`, `11-20`, `20+` anni",
         "",
         "## Copertura Cluster",
         "",
@@ -146,7 +146,7 @@ def save_markdown(summary, buying_advice, matrix, count_matrix):
         f"- Cluster deboli, con 1-{MIN_CLUSTER_COUNT - 1} annunci: **{len(weak)}**",
         f"- Cluster vuoti: **{len(empty)}**",
         "",
-        "## Matrice Prezzi MedianI",
+        "## Matrice Prezzi Mediani",
         "",
         matrix.to_markdown(),
         "",
@@ -160,7 +160,7 @@ def save_markdown(summary, buying_advice, matrix, count_matrix):
         "",
         "## Interpretazione",
         "",
-        "L'eta spiega il prezzo in modo piu stabile dei km: le moto 0-2 anni hanno mediane piu alte, mentre le 11-20 anni costano molto meno. I km aiutano a distinguere ulteriormente i cluster, ma alcune fasce hanno pochi annunci e vanno rafforzate prima di usarle per forecasting dedicato.",
+        "L'età spiega il prezzo in modo più stabile dei km: le moto 0-2 anni hanno mediane più alte, mentre le 11-20 anni costano molto meno. I km aiutano a distinguere ulteriormente i cluster, ma alcune fasce hanno pochi annunci e vanno rafforzate prima di usarle per forecasting dedicato.",
     ]
     (OUTPUT_TABLES / "age_km_market_insights.md").write_text("\n".join(lines), encoding="utf-8")
 
