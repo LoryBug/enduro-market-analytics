@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <metà charset="utf-8" />
+  <metà name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Enduro Market Analytics - Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: '#111827',
+            muted: '#64748b',
+            paper: '#f8fafc',
+            accent: '#ea580c',
+            forest: '#166534'
+          },
+          boxShadow: {
+            soft: '0 18px 50px rgba(15, 23, 42, 0.10)'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .glass { background: rgba(255,255,255,.82); backdrop-filter: blur(18px); }
+    .metric-card { border: 1px solid rgba(15, 23, 42, .08); }
+    .section-title::before { content: ''; display: inline-block; width: .65rem; height: .65rem; border-radius: 999px; background: #ea580c; margin-right: .65rem; vertical-align: .08rem; }
+    .table-wrap table { width: 100%; border-collapse: collapse; }
+    .table-wrap th { text-align: left; font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; color: #64748b; background: #f8fafc; }
+    .table-wrap th, .table-wrap td { padding: .85rem 1rem; border-bottom: 1px solid #e2e8f0; }
+    .table-wrap td { font-size: .92rem; color: #1f2937; }
+    .badge { display: inline-flex; align-items: center; border-radius: 999px; padding: .25rem .65rem; font-size: .75rem; font-weight: 700; }
+  </style>
+</head>
+<body class="bg-paper text-ink">
+  <header class="relative overflow-hidden bg-slate-950 text-white">
+    <div class="absolute inset-0 opacity-30" style="background: radial-gradient(circle at 20% 20%, #f97316 0, transparent 28%), radial-gradient(circle at 80% 0%, #22c55e 0, transparent 26%), linear-gradient(135deg, #020617, #111827);"></div>
+    <div class="relative mx-auto max-w-7xl px-5 py-12 md:px-8 md:py-16">
+      <div class="max-w-4xl">
+        <p class="mb-4 inline-flex rounded-full border border-white/20 bg-white/10 px-4 py-1 text-sm font-semibold text-orange-100">Operational Analytics Project</p>
+        <h1 class="text-4xl font-black tracking-tight md:text-6xl">Enduro Market Analytics</h1>
+        <p class="mt-5 max-w-3xl text-lg leading-8 text-slate-200">Dashboard statica per leggere il dataset, capire la selezione tramite mediane e interpretare i risultati dei modelli di forecasting sul mercato enduro.</p>
+      </div>
+      <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="rounded-2xl bg-white/10 p-5 ring-1 ring-white/15">
+          <p class="text-sm font-semibold text-slate-300">Dataset pulito</p>
+          <p class="mt-2 text-3xl font-black">1.891</p>
+          <p class="mt-1 text-sm text-slate-300">annunci analizzati</p>
+        </div>
+        <div class="rounded-2xl bg-white/10 p-5 ring-1 ring-white/15">
+          <p class="text-sm font-semibold text-slate-300">Serie mensile</p>
+          <p class="mt-2 text-3xl font-black">72</p>
+          <p class="mt-1 text-sm text-slate-300">mesi, 2020-06 -> 2026-05</p>
+        </div>
+        <div class="rounded-2xl bg-white/10 p-5 ring-1 ring-white/15">
+          <p class="text-sm font-semibold text-slate-300">Segmento core</p>
+          <p class="mt-2 text-3xl font-black">894</p>
+          <p class="mt-1 text-sm text-slate-300">enduro moderne 250-500cc</p>
+        </div>
+        <div class="rounded-2xl bg-white/10 p-5 ring-1 ring-white/15">
+          <p class="text-sm font-semibold text-slate-300">Best model</p>
+          <p class="mt-2 text-3xl font-black">RF</p>
+          <p class="mt-1 text-sm text-slate-300">MAPE 22,00%</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="sticky top-0 z-20 border-b border-slate-200 glass">
+    <div class="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-5 py-3 text-sm font-bold text-slate-700 md:px-8">
+      <a class="rounded-full px-3 py-2 hover:bg-orange-100 hover:text-orange-700" href="#dataset">Dataset</a>
+      <a class="rounded-full px-3 py-2 hover:bg-orange-100 hover:text-orange-700" href="#mediane">Mediane</a>
+      <a class="rounded-full px-3 py-2 hover:bg-orange-100 hover:text-orange-700" href="#agekm">Età/Km</a>
+      <a class="rounded-full px-3 py-2 hover:bg-orange-100 hover:text-orange-700" href="#clusterforecast">Cluster Forecast</a>
+      <a class="rounded-full px-3 py-2 hover:bg-orange-100 hover:text-orange-700" href="#futurebuy">Buy Futuro</a>
+      <a class="rounded-full px-3 py-2 hover:bg-orange-100 hover:text-orange-700" href="#forecast">Forecast</a>
+      <a class="rounded-full px-3 py-2 hover:bg-orange-100 hover:text-orange-700" href="#acquisto">Acquisto</a>
+      <a class="rounded-full px-3 py-2 hover:bg-orange-100 hover:text-orange-700" href="#grafici">Grafici</a>
+      <a class="rounded-full px-3 py-2 hover:bg-orange-100 hover:text-orange-700" href="#interpretazione">Sintesi</a>
+    </div>
+  </nav>
+
+  <main class="mx-auto max-w-7xl px-5 py-10 md:px-8">
+    <section id="dataset" class="scroll-mt-24">
+      <h2 class="section-title text-2xl font-black md:text-3xl">Dataset E Copertura</h2>
+      <p class="mt-3 max-w-4xl text-slate-600">Il dataset combina annunci storici raccolti tramite Wayback e annunci live Moto.it. L'analisi lavora sul dataset corrente pulito e tratta tutte le osservazioni nello stesso modo.</p>
+      <div class="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div class="metric-card rounded-2xl bg-white p-5 shadow-soft">
+          <p class="text-sm font-bold text-muted">Raw listings</p>
+          <p class="mt-2 text-3xl font-black">1.930</p>
+          <p class="mt-2 text-sm text-slate-500">righe nel CSV di input</p>
+        </div>
+        <div class="metric-card rounded-2xl bg-white p-5 shadow-soft">
+          <p class="text-sm font-bold text-muted">Clean listings</p>
+          <p class="mt-2 text-3xl font-black">1.891</p>
+          <p class="mt-2 text-sm text-slate-500">righe usabili dopo pulizia</p>
+        </div>
+        <div class="metric-card rounded-2xl bg-white p-5 shadow-soft">
+          <p class="text-sm font-bold text-muted">Weekly observations</p>
+          <p class="mt-2 text-3xl font-black">312</p>
+          <p class="mt-2 text-sm text-slate-500">serie settimanale</p>
+        </div>
+        <div class="metric-card rounded-2xl bg-white p-5 shadow-soft">
+          <p class="text-sm font-bold text-muted">Monthly observations</p>
+          <p class="mt-2 text-3xl font-black">72</p>
+          <p class="mt-2 text-sm text-slate-500">serie mensile principale</p>
+        </div>
+      </div>
+      <div class="mt-6 rounded-3xl bg-white p-6 shadow-soft">
+        <h3 class="text-xl font-black">Cosa rappresenta una riga?</h3>
+        <p class="mt-3 text-slate-600">Una riga rappresenta un annuncio del mercato raccolto. Le variabili principali sono data annuncio, brand, modello, anno, km, cilindrata, prezzo, localizzazione e tipo di venditore.</p>
+        <div class="mt-4 grid gap-3 md:grid-cols-3">
+          <div class="rounded-2xl bg-orange-50 p-4">
+            <p class="font-black text-orange-900">Target</p>
+            <p class="mt-1 text-sm text-orange-800">`median_price` mensile, cioè la mediana dei prezzi osservati nel mese.</p>
+          </div>
+          <div class="rounded-2xl bg-emerald-50 p-4">
+            <p class="font-black text-emerald-900">Perché mediana?</p>
+            <p class="mt-1 text-sm text-emerald-800">Riduce l'impatto degli outlier e delle moto molto costose.</p>
+          </div>
+          <div class="rounded-2xl bg-sky-50 p-4">
+            <p class="font-black text-sky-900">Uso</p>
+            <p class="mt-1 text-sm text-sky-800">Descrivere il mercato e fare forecasting dell'andamento nel tempo.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="mediane" class="mt-14 scroll-mt-24">
+      <h2 class="section-title text-2xl font-black md:text-3xl">Selezione Tramite Mediane</h2>
+      <p class="mt-3 max-w-4xl text-slate-600">Per fare qualcosa di sensato non mischiamo tutti i tipi di moto. Il mercato completo resta come contesto, ma il segmento principale ? quello delle enduro moderne racing 250-500cc.</p>
+      <div class="mt-6 overflow-hidden rounded-3xl bg-white shadow-soft table-wrap">
+        <table>
+          <thead>
+            <tr><th>Segmento</th><th>Annunci</th><th>Mesi</th><th>Mesi >= 10</th><th>Mediana delle mediane</th><th>Range</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Core moderno 250-500cc</strong><br><span class="text-sm text-slate-500">Segmento principale</span></td><td>894</td><td>62</td><td>29</td><td>6.800 EUR</td><td>2020-07 -> 2026-05</td></tr>
+            <tr><td><strong>Mercato completo</strong></td><td>1.891</td><td>72</td><td>67</td><td>6.225 EUR</td><td>2020-06 -> 2026-05</td></tr>
+            <tr><td><strong>Maxi enduro 690/701</strong></td><td>211</td><td>34</td><td>12</td><td>7.412,5 EUR</td><td>2020-06 -> 2026-05</td></tr>
+            <tr><td><strong>Vintage / epoca</strong></td><td>587</td><td>52</td><td>13</td><td>3.400 EUR</td><td>2020-06 -> 2026-05</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="mt-6 grid gap-6 lg:grid-cols-2">
+        <div class="rounded-3xl bg-white p-6 shadow-soft">
+          <h3 class="text-xl font-black">Regola del segmento core</h3>
+          <pre class="mt-4 overflow-x-auto rounded-2xl bg-slate-950 p-4 text-sm text-orange-100"><code>dataset completo
+market_segment = modern
+250cc &lt;= engine_cc &lt;= 500cc
+1000 &lt;= price &lt;= 20000</code></pre>
+          <p class="mt-4 text-slate-600">Questa scelta evita di mischiare moto racing moderne, maxi enduro e moto d'epoca, che hanno motivazioni di prezzo diverse.</p>
+        </div>
+        <div class="rounded-3xl bg-white p-6 shadow-soft">
+          <h3 class="text-xl font-black">Mesi recenti del segmento core</h3>
+          <div class="mt-4 space-y-3 text-sm">
+            <div class="flex justify-between rounded-xl bg-slate-50 p-3"><span>2026-03</span><strong>mediana 6.425 EUR, 48 annunci</strong></div>
+            <div class="flex justify-between rounded-xl bg-slate-50 p-3"><span>2026-04</span><strong>mediana 6.500 EUR, 45 annunci</strong></div>
+            <div class="flex justify-between rounded-xl bg-slate-50 p-3"><span>2026-05</span><strong>mediana 6.000 EUR, 110 annunci</strong></div>
+          </div>
+          <p class="mt-4 text-slate-600">Nel 2026 il segmento core mostra valori intorno a 6.000-6.500 EUR, con maggio coperto da molti annunci.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="agekm" class="mt-14 scroll-mt-24">
+      <h2 class="section-title text-2xl font-black md:text-3xl">Ordine Nei Dati: Età E Chilometri</h2>
+      <p class="mt-3 max-w-4xl text-slate-600">Per rendere le previsioni più veritiere e i consigli di acquisto più utili, il segmento core viene ulteriormente diviso per fasce di anzianità e chilometraggio. Questo aiuta a distinguere moto quasi nuove, recenti e più datate.</p>
+      <div class="mt-6 grid gap-4 md:grid-cols-3">
+        <div class="metric-card rounded-2xl bg-white p-5 shadow-soft">
+          <p class="text-sm font-bold text-muted">Cluster forti</p>
+          <p class="mt-2 text-3xl font-black">8</p>
+          <p class="mt-2 text-sm text-slate-500">almeno 20 annunci</p>
+        </div>
+        <div class="metric-card rounded-2xl bg-white p-5 shadow-soft">
+          <p class="text-sm font-bold text-muted">Cluster deboli</p>
+          <p class="mt-2 text-3xl font-black">4</p>
+          <p class="mt-2 text-sm text-slate-500">da rafforzare prima di forecast dedicati</p>
+        </div>
+        <div class="metric-card rounded-2xl bg-white p-5 shadow-soft">
+          <p class="text-sm font-bold text-muted">Cluster vuoti</p>
+          <p class="mt-2 text-3xl font-black">8</p>
+          <p class="mt-2 text-sm text-slate-500">combinazioni rare o poco realistiche</p>
+        </div>
+      </div>
+      <div class="mt-6 overflow-hidden rounded-3xl bg-white shadow-soft table-wrap">
+        <table>
+          <thead><tr><th>Età / Km</th><th>0-5k</th><th>5-10k</th><th>10-15k</th><th>15k+</th></tr></thead>
+          <tbody>
+            <tr><td><strong>0-2 anni</strong></td><td>8.550 EUR<br><span class="text-xs text-slate-500">n=92</span></td><td>7.500 EUR<br><span class="text-xs text-slate-500">n=1</span></td><td>n.d.</td><td>n.d.</td></tr>
+            <tr><td><strong>3-5 anni</strong></td><td>7.200 EUR<br><span class="text-xs text-slate-500">n=274</span></td><td>6.175 EUR<br><span class="text-xs text-slate-500">n=20</span></td><td>n.d.</td><td>n.d.</td></tr>
+            <tr><td><strong>6-10 anni</strong></td><td>6.200 EUR<br><span class="text-xs text-slate-500">n=267</span></td><td>5.900 EUR<br><span class="text-xs text-slate-500">n=43</span></td><td>5.800 EUR<br><span class="text-xs text-slate-500">n=3</span></td><td>4.800 EUR<br><span class="text-xs text-slate-500">n=20</span></td></tr>
+            <tr><td><strong>11-20 anni</strong></td><td>4.100 EUR<br><span class="text-xs text-slate-500">n=53</span></td><td>4.400 EUR<br><span class="text-xs text-slate-500">n=20</span></td><td>4.300 EUR<br><span class="text-xs text-slate-500">n=17</span></td><td>5.600 EUR<br><span class="text-xs text-slate-500">n=12</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="mt-6 grid gap-6 lg:grid-cols-2">
+        <figure class="rounded-3xl bg-white p-4 shadow-soft">
+          <img class="w-full rounded-2xl border border-slate-100" src="../outputs/figures/08_age_km_price_heatmap.png" alt="Heatmap prezzo per età e km" />
+          <figcaption class="mt-3 px-2 text-sm text-slate-600"><strong>Heatmap:</strong> le mediane scendono chiaramente con l'età; i km aiutano a raffinare il consiglio ma alcune fasce sono deboli.</figcaption>
+        </figure>
+        <div class="rounded-3xl bg-white p-6 shadow-soft">
+          <h3 class="text-xl font-black">Consigli pratici di acquisto</h3>
+          <div class="mt-4 space-y-3 text-sm">
+            <div class="rounded-xl bg-emerald-50 p-3 text-emerald-900"><strong>Conveniente:</strong> 11-20 anni, 0-5k km; mediana 4.100 EUR con 53 annunci.</div>
+            <div class="rounded-xl bg-sky-50 p-3 text-sky-900"><strong>Equilibrato:</strong> 6-10 anni, 5-10k km; mediana 5.900 EUR con 43 annunci.</div>
+            <div class="rounded-xl bg-orange-50 p-3 text-orange-900"><strong>Caro ma recente:</strong> 0-2 anni, 0-5k km; mediana 8.550 EUR con 92 annunci.</div>
+          </div>
+          <p class="mt-4 text-slate-600">Dopo il rafforzamento mirato, i cluster forti passano da 5 a 8. Restano pochi cluster deboli, ma non tutti sono realistici o utili per il forecasting.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="clusterforecast" class="mt-14 scroll-mt-24">
+      <h2 class="section-title text-2xl font-black md:text-3xl">Forecast Per Cluster Età/Km</h2>
+      <p class="mt-3 max-w-4xl text-slate-600">Il forecasting per cluster è più credibile del forecast generale perché confronta moto più simili. Usiamo il forecast solo sui cluster con almeno 20 mesi osservati, così evitiamo serie troppo corte.</p>
+      <div class="mt-6 overflow-hidden rounded-3xl bg-white shadow-soft table-wrap">
+        <table>
+          <thead><tr><th>Cluster</th><th>Best model</th><th>RMSE</th><th>MAPE</th><th>Ultima mediana</th><th>Buying score</th><th>Consiglio</th></tr></thead>
+          <tbody>
+            <tr><td><strong>11-20 anni / 0-5k</strong></td><td>Random Forest</td><td>91,91</td><td>1,83%</td><td>4.100 EUR</td><td>-25 EUR</td><td><span class="badge bg-slate-100 text-slate-700">Neutro</span></td></tr>
+            <tr><td><strong>6-10 anni / 0-5k</strong></td><td>Random Forest</td><td>572,37</td><td>8,88%</td><td>5.600 EUR</td><td>+400 EUR</td><td><span class="badge bg-sky-100 text-sky-800">Leggermente conveniente</span></td></tr>
+            <tr><td><strong>3-5 anni / 0-5k</strong></td><td>Seasonal naive</td><td>741,96</td><td>8,21%</td><td>6.200 EUR</td><td>+900 EUR</td><td><span class="badge bg-emerald-100 text-emerald-800">Buona finestra</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="mt-6 grid gap-6 lg:grid-cols-2">
+        <figure class="rounded-3xl bg-white p-4 shadow-soft">
+          <img class="w-full rounded-2xl border border-slate-100" src="../outputs/figures/11_cluster_forecast_rmse.png" alt="RMSE forecast per cluster" />
+          <figcaption class="mt-3 px-2 text-sm text-slate-600"><strong>Forecast cluster:</strong> gli errori sono molto più bassi rispetto al forecast generale.</figcaption>
+        </figure>
+        <figure class="rounded-3xl bg-white p-4 shadow-soft">
+          <img class="w-full rounded-2xl border border-slate-100" src="../outputs/figures/12_cluster_buy_score.png" alt="Buying score per cluster" />
+          <figcaption class="mt-3 px-2 text-sm text-slate-600"><strong>Buying score:</strong> misura quanto il prezzo attuale del cluster è sotto/sopra la sua mediana storica.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="futurebuy" class="mt-14 scroll-mt-24">
+      <h2 class="section-title text-2xl font-black md:text-3xl">Buy Futuro: Giugno-Dicembre 2026</h2>
+      <p class="mt-3 max-w-4xl text-slate-600">Questa sezione usa i modelli migliori dei cluster età/km per stimare finestre future di acquisto. Il buying score confronta il prezzo previsto con la mediana storica dello stesso cluster: se è positivo, il mese stimato è più conveniente del normale per quel tipo di moto.</p>
+      <div class="mt-6 overflow-hidden rounded-3xl bg-white shadow-soft table-wrap">
+        <table>
+          <thead><tr><th>Periodo</th><th>Cluster</th><th>Prezzo previsto</th><th>Mediana storica cluster</th><th>Buying score</th><th>Modello</th><th>Valutazione</th></tr></thead>
+          <tbody>
+            <tr><td>2026-09</td><td><strong>3-5 anni / 0-5k</strong></td><td>6.200 EUR</td><td>7.100 EUR</td><td>+900 EUR</td><td>Seasonal naive</td><td><span class="badge bg-emerald-100 text-emerald-800">Strong buy</span></td></tr>
+            <tr><td>2026-06</td><td><strong>3-5 anni / 0-5k</strong></td><td>6.800 EUR</td><td>7.100 EUR</td><td>+300 EUR</td><td>Seasonal naive</td><td><span class="badge bg-sky-100 text-sky-800">Good buy</span></td></tr>
+            <tr><td>2026-07</td><td><strong>3-5 anni / 0-5k</strong></td><td>6.800 EUR</td><td>7.100 EUR</td><td>+300 EUR</td><td>Seasonal naive</td><td><span class="badge bg-sky-100 text-sky-800">Good buy</span></td></tr>
+            <tr><td>2026-10</td><td><strong>3-5 anni / 0-5k</strong></td><td>6.800 EUR</td><td>7.100 EUR</td><td>+300 EUR</td><td>Seasonal naive</td><td><span class="badge bg-sky-100 text-sky-800">Good buy</span></td></tr>
+            <tr><td>2026-11</td><td><strong>3-5 anni / 0-5k</strong></td><td>6.800 EUR</td><td>7.100 EUR</td><td>+300 EUR</td><td>Seasonal naive</td><td><span class="badge bg-sky-100 text-sky-800">Good buy</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="mt-6 grid gap-6 lg:grid-cols-2">
+        <figure class="rounded-3xl bg-white p-4 shadow-soft">
+          <img class="w-full rounded-2xl border border-slate-100" src="../outputs/figures/13_future_cluster_buy_windows.png" alt="Future cluster buy windows" />
+          <figcaption class="mt-3 px-2 text-sm text-slate-600"><strong>Buy futuro:</strong> la heatmap mostra mese per mese il risparmio atteso rispetto alla mediana storica del cluster.</figcaption>
+        </figure>
+        <div class="rounded-3xl bg-white p-6 shadow-soft">
+          <h3 class="text-xl font-black">Come leggerlo</h3>
+          <p class="mt-3 text-slate-600">Non significa che tutto il mercato sarà economico a settembre 2026. Significa che, secondo il modello del cluster, le enduro moderne 250-500cc con 3-5 anni e 0-5k km potrebbero stare sotto la loro mediana storica.</p>
+          <p class="mt-3 text-slate-600">Questa è la parte più operativa del progetto: non solo prevedere un prezzo, ma trasformare la previsione in una decisione di acquisto.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="forecast" class="mt-14 scroll-mt-24">
+      <h2 class="section-title text-2xl font-black md:text-3xl">Risultati Forecasting</h2>
+      <p class="mt-3 max-w-4xl text-slate-600">Sono stati confrontati baseline stagionale, Holt-Winters, Random Forest e MLP. Il target ? il prezzo mediano mensile.</p>
+      <div class="mt-6 overflow-hidden rounded-3xl bg-white shadow-soft table-wrap">
+        <table>
+          <thead><tr><th>Modello</th><th>MAE</th><th>RMSE</th><th>MAPE</th><th>R2</th><th>Lettura</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Random Forest</strong> <span class="badge bg-emerald-100 text-emerald-800">Best</span></td><td>1.402,22</td><td>1.762,12</td><td>22,00%</td><td>0,226</td><td>Miglior compromesso tra errore e capacità predittiva.</td></tr>
+            <tr><td>Holt-Winters</td><td>1.713,03</td><td>2.123,34</td><td>31,83%</td><td>-0,124</td><td>Modello statistico utile come confronto.</td></tr>
+            <tr><td>Seasonal naive</td><td>2.311,07</td><td>2.725,96</td><td>39,74%</td><td>-0,853</td><td>Baseline semplice, superata dai modelli.</td></tr>
+            <tr><td>MLP</td><td>3.135,73</td><td>3.916,69</td><td>52,97%</td><td>-2,825</td><td>Non competitivo su questa serie.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="mt-6 rounded-3xl bg-white p-6 shadow-soft">
+        <h3 class="text-xl font-black">Interpretàzione del risultato</h3>
+        <p class="mt-3 text-slate-600">Il Random Forest ? il modello migliore: riesce a sfruttare lag e variabili temporali meglio dei metodi puramente statistici. L'errore rimane comunque significativo perché il mercato ? rumoroso: modelli, anni, km e tipologie di moto variano molto.</p>
+      </div>
+    </section>
+
+    <section id="acquisto" class="mt-14 scroll-mt-24">
+      <h2 class="section-title text-2xl font-black md:text-3xl">Periodi Potenzialmente Convenienti</h2>
+      <p class="mt-3 max-w-4xl text-slate-600">La raccomandazione confronta il prezzo previsto dal modello migliore con la mediana generale. Un valore positivo indica un periodo potenzialmente più conveniente.</p>
+      <div class="mt-6 overflow-hidden rounded-3xl bg-white shadow-soft table-wrap">
+        <table>
+          <thead><tr><th>Periodo</th><th>Prezzo reale</th><th>Prezzo previsto</th><th>Risparmio stimato</th><th>Consiglio</th></tr></thead>
+          <tbody>
+            <tr><td>2026-05</td><td>5.200</td><td>5.681</td><td>1.519</td><td><span class="badge bg-emerald-100 text-emerald-800">Sì</span></td></tr>
+            <tr><td>2025-07</td><td>4.000</td><td>5.686</td><td>1.514</td><td><span class="badge bg-emerald-100 text-emerald-800">Sì</span></td></tr>
+            <tr><td>2026-04</td><td>5.400</td><td>5.843</td><td>1.357</td><td><span class="badge bg-emerald-100 text-emerald-800">Sì</span></td></tr>
+            <tr><td>2025-10</td><td>8.425</td><td>6.079</td><td>1.121</td><td><span class="badge bg-emerald-100 text-emerald-800">Sì</span></td></tr>
+            <tr><td>2025-08</td><td>6.000</td><td>6.177</td><td>1.023</td><td><span class="badge bg-emerald-100 text-emerald-800">Sì</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="grafici" class="mt-14 scroll-mt-24">
+      <h2 class="section-title text-2xl font-black md:text-3xl">Grafici Generati</h2>
+      <div class="mt-6 grid gap-6 lg:grid-cols-2">
+        <figure class="rounded-3xl bg-white p-4 shadow-soft">
+          <img class="w-full rounded-2xl border border-slate-100" src="../outputs/figures/07_selected_core_monthly_median.png" alt="Mediana mensile segmento core" />
+          <figcaption class="mt-3 px-2 text-sm text-slate-600"><strong>Segmentazione:</strong> confronto tra mercato completo e segmento core, utile per spiegare perché non conviene mischiare tutte le moto.</figcaption>
+        </figure>
+        <figure class="rounded-3xl bg-white p-4 shadow-soft">
+          <img class="w-full rounded-2xl border border-slate-100" src="../outputs/figures/04_monthly_median_price.png" alt="Mediana mensile mercato completo" />
+          <figcaption class="mt-3 px-2 text-sm text-slate-600"><strong>Tipi di moto:</strong> andamento mensile del prezzo mediano per segmento, non del mercato aggregato sporco.</figcaption>
+        </figure>
+        <figure class="rounded-3xl bg-white p-4 shadow-soft">
+          <img class="w-full rounded-2xl border border-slate-100" src="../outputs/figures/05_forecast_comparison.png" alt="Confronto forecast" />
+          <figcaption class="mt-3 px-2 text-sm text-slate-600"><strong>Forecast generale:</strong> confronto tra valori reali e previsioni; mostra perché il mercato aggregato resta rumoroso.</figcaption>
+        </figure>
+        <figure class="rounded-3xl bg-white p-4 shadow-soft">
+          <img class="w-full rounded-2xl border border-slate-100" src="../outputs/figures/06_model_rmse_comparison.png" alt="Confronto RMSE modelli" />
+          <figcaption class="mt-3 px-2 text-sm text-slate-600"><strong>Metriche:</strong> confronto RMSE tra modelli.</figcaption>
+        </figure>
+        <figure class="rounded-3xl bg-white p-4 shadow-soft">
+          <img class="w-full rounded-2xl border border-slate-100" src="../outputs/figures/01_price_distribution.png" alt="Distribuzione prezzi" />
+          <figcaption class="mt-3 px-2 text-sm text-slate-600"><strong>Distribuzione per tipo:</strong> mostra che core, maxi e vintage hanno livelli di prezzo diversi; per questo non vanno mischiati.</figcaption>
+        </figure>
+        <figure class="rounded-3xl bg-white p-4 shadow-soft">
+          <img class="w-full rounded-2xl border border-slate-100" src="../outputs/figures/02_price_vs_age.png" alt="Prezzo vs età moto" />
+          <figcaption class="mt-3 px-2 text-sm text-slate-600"><strong>Prezzo vs età per tipo:</strong> la relazione è leggibile solo distinguendo enduro moderne, maxi, vintage e youngtimer.</figcaption>
+        </figure>
+        <figure class="rounded-3xl bg-white p-4 shadow-soft">
+          <img class="w-full rounded-2xl border border-slate-100" src="../outputs/figures/09_price_by_age_band.png" alt="Prezzo per fascia età" />
+          <figcaption class="mt-3 px-2 text-sm text-slate-600"><strong>Età:</strong> boxplot per fascia, con mediana e dispersione; l'anzianità organizza il prezzo in modo più stabile.</figcaption>
+        </figure>
+        <figure class="rounded-3xl bg-white p-4 shadow-soft">
+          <img class="w-full rounded-2xl border border-slate-100" src="../outputs/figures/10_price_by_km_band.png" alt="Prezzo per fascia km" />
+          <figcaption class="mt-3 px-2 text-sm text-slate-600"><strong>Km:</strong> boxplot per fascia chilometrica; i km completano la lettura ma da soli spiegano meno dell'età.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="interpretazione" class="mt-14 scroll-mt-24">
+      <h2 class="section-title text-2xl font-black md:text-3xl">Cosa Raccontano I Dati</h2>
+      <div class="mt-6 grid gap-6 lg:grid-cols-3">
+        <div class="rounded-3xl bg-white p-6 shadow-soft">
+          <p class="text-lg font-black">1. Il mercato va segmentato</p>
+          <p class="mt-3 text-slate-600">Il mercato completo ? utile come panoramica, ma mischia moto moderne, maxi enduro e vintage. La scelta core 250-500cc rende l'analisi più coerente.</p>
+        </div>
+        <div class="rounded-3xl bg-white p-6 shadow-soft">
+          <p class="text-lg font-black">2. La mediana ? la metrica giusta</p>
+          <p class="mt-3 text-slate-600">Gli annunci hanno outlier e distribuzioni sbilanciate. La mediana descrive meglio il prezzo tipico rispetto alla media.</p>
+        </div>
+        <div class="rounded-3xl bg-white p-6 shadow-soft">
+          <p class="text-lg font-black">3. Il Random Forest ? il migliore</p>
+          <p class="mt-3 text-slate-600">Batte baseline, Holt-Winters e MLP sul target mensile generale, con MAPE pari a 22,00%. Nei cluster età/km più coperti l'errore scende ulteriormente.</p>
+        </div>
+      </div>
+      <div class="mt-6 rounded-3xl bg-slate-950 p-6 text-white shadow-soft">
+        <h3 class="text-xl font-black">Frase pronta per la presentazione</h3>
+        <p class="mt-3 leading-8 text-slate-200">Abbiamo costruito una serie temporale del mercato enduro usando annunci aggregati per mese. Per evitare una lettura troppo rumorosa, abbiamo selezionato un sotto-mercato più coerente: enduro moderne 250-500cc. Su questo segmento analizziamo mediane mensili e poi organizziamo i prezzi per fasce di età e chilometraggio. Il forecasting generale resta come benchmark, mentre i risultati più utili arrivano dai cluster età/km: su alcuni cluster il MAPE scende sotto il 10%.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="mt-10 border-t border-slate-200 bg-white">
+    <div class="mx-auto max-w-7xl px-5 py-8 text-sm text-slate-500 md:px-8">
+      Generato dalla pipeline `python scripts/run_final_pipeline.py`.
+    </div>
+  </footer>
+</body>
+</html>

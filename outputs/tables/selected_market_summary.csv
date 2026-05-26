@@ -1,0 +1,5 @@
+selected_segment,definition,months_with_data,reliable_months_min10,first_month,last_month,total_listings,median_of_monthly_medians,lowest_reliable_month,lowest_reliable_median,highest_reliable_month,highest_reliable_median
+core_modern_enduro_250_500,"Modern enduro listings, 250-500cc, excluding vintage/youngtimer rows.",62,29,2020-07-31,2026-05-31,894,6800.0,2020-07-31,5200.0,2025-12-31,8675.0
+full_market,All listings in the working dataset.,72,67,2020-06-30,2026-05-31,1891,6225.0,2025-06-30,3500.0,2025-04-30,11000.0
+maxi_enduro_690_701,"KTM 690 / Husqvarna 701 style enduro listings, kept separate because prices differ from racing enduro.",34,12,2020-06-30,2026-05-31,211,7412.5,2026-04-30,5900.0,2026-05-31,8900.0
+vintage_epoca,"Vintage and youngtimer listings, kept separate because collector value distorts the market median.",54,13,2020-06-30,2026-05-31,598,3400.0,2026-03-31,2225.0,2024-05-31,5150.0

@@ -1,0 +1,13 @@
+age_band,km_band,listings_count,coverage_status,median_price,q25_price,q75_price,discount_vs_core_baseline,relative_discount_pct,value_label,buying_note
+11-20,0-5k,53,strong,4100.0,3900.0,4750.0,1937.5,32.091097308488614,cheap,Cluster conveniente: prezzo mediano molto sotto la baseline del segmento core.
+11-20,10-15k,17,weak,4300.0,4000.0,4700.0,1737.5,28.778467908902694,cheap,Interpretare con cautela: cluster con pochi annunci.
+11-20,5-10k,20,strong,4400.0,4100.0,4650.0,1637.5,27.12215320910973,cheap,Cluster conveniente: prezzo mediano molto sotto la baseline del segmento core.
+6-10,15k+,20,strong,4800.0,3937.5,5337.5,1237.5,20.496894409937887,cheap,Cluster conveniente: prezzo mediano molto sotto la baseline del segmento core.
+3-5,0-5k,274,strong,7200.0,6300.0,8337.5,-1162.5,-19.25465838509317,expensive,Cluster caro: adatto solo se si cerca moto molto recente o specifica.
+0-2,5-10k,1,weak,7500.0,7500.0,7500.0,-1462.5,-24.22360248447205,expensive,Interpretare con cautela: cluster con pochi annunci.
+0-2,0-5k,92,strong,8550.0,7500.0,9899.25,-2512.5,-41.61490683229814,expensive,Cluster caro: adatto solo se si cerca moto molto recente o specifica.
+11-20,15k+,12,weak,5600.0,4762.5,6412.25,437.5,7.246376811594203,normal,Interpretare con cautela: cluster con pochi annunci.
+6-10,10-15k,3,weak,5800.0,5600.0,6395.0,237.5,3.9337474120082816,normal,Interpretare con cautela: cluster con pochi annunci.
+6-10,5-10k,43,strong,5900.0,5445.0,6875.0,137.5,2.2774327122153206,normal,Cluster nella norma rispetto alla baseline del segmento core.
+3-5,5-10k,20,strong,6175.0,5900.0,6525.0,-137.5,-2.2774327122153206,normal,Cluster nella norma rispetto alla baseline del segmento core.
+6-10,0-5k,267,strong,6200.0,5495.0,7200.0,-162.5,-2.691511387163561,normal,Cluster nella norma rispetto alla baseline del segmento core.

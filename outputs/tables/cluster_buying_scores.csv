@@ -1,0 +1,4 @@
+cluster_id,latest_period,latest_median_price,historical_cluster_median,buy_score,buy_score_pct,best_model,best_rmse,best_mape,recommendation
+3-5__0-5k,2026-05-31,6200.0,7100.0,900.0,12.676056338028168,seasonal_naive,741.9646318776016,8.214481207112732,good_buy_window
+6-10__0-5k,2026-05-31,5600.0,6000.0,400.0,6.666666666666667,random_forest,568.3699499561609,8.87134632019557,slightly_convenient
+11-20__0-5k,2026-05-31,4100.0,4075.0,-25.0,-0.6134969325153374,random_forest,89.18820172473012,1.813571662494778,neutral
