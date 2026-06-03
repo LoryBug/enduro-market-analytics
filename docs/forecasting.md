@@ -8,7 +8,7 @@ nav_order: 3
 
 ## Panoramica
 
-Il forecasting generale usa la serie mensile del mercato come benchmark. Lo script principale ? `scripts/02_train_forecasting_models.py`.
+Il forecasting generale usa la serie mensile del mercato come benchmark. Lo script principale è `scripts/02_train_forecasting_models.py`.
 
 Questa parte serve a verificare se i modelli riescono a prevedere il `median_price` aggregato del mercato. Non è però la parte più forte del progetto, perché il mercato completo mescola moto molto diverse.
 
@@ -56,12 +56,12 @@ La baseline è fondamentale: un modello avanzato ha senso solo se migliora una r
 
 Le metriche usate sono:
 
-| Metrica | Interpretàzione |
+| Metrica | Interpretazione |
 |---|---|
 | MAE | errore medio assoluto in euro |
 | RMSE | errore quadratico medio, penalizza errori grandi |
 | MAPE | errore percentuale medio |
-| R2 | quota di variabilita spiegata rispetto alla media |
+| R2 | quota di variabilità spiegata rispetto alla media |
 
 Risultati sul forecast generale:
 
@@ -90,7 +90,7 @@ Random Forest risulta il modello migliore sul mercato generale, ma l'errore rima
 
 ---
 
-## 5. Interpretàzione
+## 5. Interpretazione
 
 Il forecast generale è utile come benchmark, ma non basta per prendere decisioni operative. Se in un mese aumentano le moto recenti, il prezzo mediano sale anche se il mercato non è realmente diventato più caro per ogni tipo di enduro.
 

@@ -119,4 +119,3 @@ La parte più solida emerge però dai cluster età/km. Alcuni cluster hanno MAPE
 - [Cluster Età/Km E Raccomandazioni](cluster_prescriptive.md)
 - [Conclusioni E Confronto](conclusions.md)
 - [Dataset Summary](dataset-summary.md)
-- [Giustificazione Metodologica](methodological-justification.md)

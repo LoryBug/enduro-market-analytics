@@ -76,7 +76,7 @@ La heatmap mostra che l'età organizza il prezzo in modo molto chiaro. Il chilom
 
 ![Prezzo per età](img/09_price_by_age_band.png)
 
-Le moto più recenti hanno prezzi mediani più alti. Le fasce `11-20` anni diventano più convenienti, ma vanno interpretàte considerando condizioni e disponibilità.
+Le moto più recenti hanno prezzi mediani più alti. Le fasce `11-20` anni diventano più convenienti, ma vanno interpretate considerando condizioni e disponibilità.
 
 ![Prezzo per km](img/10_price_by_km_band.png)
 

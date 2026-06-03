@@ -37,7 +37,7 @@ Il risultato conferma che Random Forest sfrutta meglio le feature esplicative de
 
 ## 2. Riepilogo Cluster
 
-| Cluster | Best model | RMSE | MAPE | Interpretàzione |
+| Cluster | Best model | RMSE | MAPE | Interpretazione |
 |---|---|---:|---:|---|
 | 11-20 / 0-5k | Random Forest | 89.19 | 1.81% | serie molto stabile nel test |
 | 3-5 / 0-5k | Seasonal naive | 741.96 | 8.21% | cluster ricco ma più variabile |
@@ -92,7 +92,7 @@ La parte prescrittiva è centrale: il forecast viene tradotto in finestre di acq
 |---|---|---|
 | Dataset non enorme | Modelli complessi meno affidabili | Baseline e modelli robusti |
 | Cluster con pochi dati | Forecast fragile su alcuni segmenti | Soglia minima di mesi osservati |
-| Prezzi richiesti | Non sono prezzi finali di vendita | Interpretàzione come mercato degli annunci |
+| Prezzi richiesti | Non sono prezzi finali di vendita | Interpretazione come mercato degli annunci |
 | Variabili non osservate | Stato reale e manutenzione non pienamente catturati | Mediana e aggregazione temporale |
 
 ---

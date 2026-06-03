@@ -8,7 +8,7 @@ nav_order: 2
 
 ## Panoramica
 
-Il preprocessing trasforma gli annunci grezzi in dataset puliti e serie temporali aggregabili. Lo script principale ? `scripts/01_preprocess.py`, che usa le funzioni definite in `src/preprocessing.py`.
+Il preprocessing trasforma gli annunci grezzi in dataset puliti e serie temporali aggregabili. Lo script principale è `scripts/01_preprocess.py`, che usa le funzioni definite in `src/preprocessing.py`.
 
 L'obiettivo non è preparare un dataset per stimare il prezzo di una singola moto, ma costruire osservazioni temporali affidabili per il forecasting.
 
@@ -19,7 +19,7 @@ L'obiettivo non è preparare un dataset per stimare il prezzo di una singola mot
 Il dataset raw deve contenere almeno queste colonne:
 
 ```csv
-listing_date,source,brand,model,year,km,engine_cc,price,region,province,seller_type,is_2stroke,condition_score,has_documents,url
+listing_date,snapshot_date,source,brand,model,year,km,engine_cc,price,region,province,seller_type,is_2stroke,condition_score,has_documents
 ```
 
 Tutte le righe del dataset vengono trattate come osservazioni del mercato e passano attraverso la stessa pipeline di pulizia, aggregazione e modellazione.

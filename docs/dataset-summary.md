@@ -2,7 +2,7 @@
 
 ## Dataset Corrente
 
-Il dataset raw consolidato usato dalla pipeline finale e:
+Il dataset raw consolidato usato dalla pipeline finale è:
 
 ```text
 data/raw/enduro_listings_raw.csv
@@ -48,7 +48,7 @@ Periodo coperto:
 
 ## Segmento Principale
 
-Il segmento principale per l'analisi operativa e:
+Il segmento principale per l'analisi operativa è:
 
 ```text
 modern enduro 250-500cc
@@ -92,7 +92,7 @@ Modelli usati:
 - `random_forest` come metodo tree-based;
 - `mlp` come metodo neural sul forecast generale.
 
-Il forecast generale resta un benchmark. Il risultato operativo più utile e il forecast per cluster età/km, salvato in:
+Il forecast generale resta un benchmark. Il risultato operativo più utile è il forecast per cluster età/km, salvato in:
 
 - `outputs/tables/metrics.csv`
 - `outputs/tables/model_comparison_tests.csv`
@@ -102,7 +102,7 @@ Il forecast generale resta un benchmark. Il risultato operativo più utile e il 
 
 ## Dashboard
 
-La dashboard finale e:
+La dashboard finale è:
 
 ```text
 report/index.html
