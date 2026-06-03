@@ -1,0 +1,7 @@
+model_a,model_b,better_model_by_mean_abs_error,mean_abs_error_diff_a_minus_b,wins_a,wins_b,ties,sign_test_p_value
+seasonal_naive,random_forest,random_forest,908.8541630995832,3,11,0,0.057373046875
+seasonal_naive,holt_winters,holt_winters,598.0395365634528,4,10,0,0.1795654296875
+random_forest,mlp,random_forest,-1903.9477030689973,9,5,0,0.4239501953125
+seasonal_naive,mlp,seasonal_naive,-995.0935399694141,8,6,0,0.79052734375
+holt_winters,mlp,holt_winters,-1593.1330765328664,8,6,0,0.79052734375
+holt_winters,random_forest,random_forest,310.81462653613045,7,7,0,1.0

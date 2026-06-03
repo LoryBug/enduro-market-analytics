@@ -74,6 +74,8 @@ Risultati sul forecast generale:
 
 Il miglior modello generale e `random_forest`, con MAPE pari a circa `22.00%`.
 
+Oltre alle metriche aggregate, il progetto salva anche un confronto statistico pairwise degli errori assoluti in `outputs/tables/model_comparison_tests.csv`. Il test usato è un sign test esatto: per ogni coppia di modelli conta in quanti periodi un modello produce errore assoluto minore dell'altro e calcola un p-value sotto l'ipotesi che i due modelli abbiano la stessa probabilità di vincere sul periodo di test.
+
 ---
 
 ## 4. Grafici Di Confronto

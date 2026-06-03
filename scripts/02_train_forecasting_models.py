@@ -8,7 +8,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.config import FORECAST_TARGET, LAG_COUNT, MONTHLY_SERIES, OUTPUT_FIGURES, OUTPUT_TABLES, TEST_SIZE, WEEKLY_SERIES
 from src.features import chronological_split, make_lagged_features
-from src.metrics import regression_metrics, save_metrics
+from src.metrics import compare_absolute_errors, regression_metrics, save_metrics
 from src.models import holt_winters_forecast, seasonal_naive_forecast, train_mlp, train_random_forest
 from src.plots import save_forecast_comparison, save_metrics_bar
 
@@ -60,13 +60,17 @@ def main():
 
     metrics_df = save_metrics(metrics_rows, OUTPUT_TABLES / "metrics.csv")
     predictions.to_csv(OUTPUT_TABLES / "predictions.csv", index=False)
+    comparison_tests = compare_absolute_errors(predictions)
+    comparison_tests.to_csv(OUTPUT_TABLES / "model_comparison_tests.csv", index=False)
 
     save_forecast_comparison(predictions, FORECAST_TARGET, OUTPUT_FIGURES / "05_forecast_comparison.png")
     save_metrics_bar(metrics_df, OUTPUT_FIGURES / "06_model_rmse_comparison.png")
 
     print(metrics_df.to_string(index=False))
+    print(comparison_tests.to_string(index=False))
     print(f"Saved predictions: {OUTPUT_TABLES / 'predictions.csv'}")
     print(f"Saved metrics: {OUTPUT_TABLES / 'metrics.csv'}")
+    print(f"Saved model comparison tests: {OUTPUT_TABLES / 'model_comparison_tests.csv'}")
 
 
 if __name__ == "__main__":

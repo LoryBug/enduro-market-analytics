@@ -94,6 +94,8 @@ Modelli usati:
 
 Il forecast generale resta un benchmark. Il risultato operativo più utile e il forecast per cluster età/km, salvato in:
 
+- `outputs/tables/metrics.csv`
+- `outputs/tables/model_comparison_tests.csv`
 - `outputs/tables/cluster_forecast_metrics.csv`
 - `outputs/tables/cluster_buying_scores.csv`
 - `outputs/tables/future_cluster_buy_recommendations.csv`
