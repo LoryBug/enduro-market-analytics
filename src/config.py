@@ -8,7 +8,6 @@ OUTPUT_FIGURES = PROJECT_ROOT / "outputs" / "figures"
 OUTPUT_TABLES = PROJECT_ROOT / "outputs" / "tables"
 
 RAW_LISTINGS = DATA_RAW / "enduro_listings_raw.csv"
-RAW_WAYBACK_LISTINGS = DATA_RAW / "enduro_listings_wayback.csv"
 PROCESSED_LISTINGS = DATA_PROCESSED / "enduro_listings_clean.csv"
 WEEKLY_SERIES = DATA_PROCESSED / "weekly_market_series.csv"
 MONTHLY_SERIES = DATA_PROCESSED / "monthly_market_series.csv"

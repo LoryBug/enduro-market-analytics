@@ -33,6 +33,7 @@ desktop.ini
 
 # Generated processed datasets
 data/processed/
+data/raw/enduro_listings_wayback.csv
 
 # Local environment variables
 .env

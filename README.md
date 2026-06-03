@@ -32,7 +32,7 @@ Esecuzione completa consigliata:
 python scripts/run_final_pipeline.py
 ```
 
-Collector opzionali, da lanciare solo se si vogliono aggiornare i dati reali:
+Collector opzionali, da lanciare solo per raccolte locali fuori dalla pipeline finale:
 
 ```bash
 python scripts/00_collect_wayback_moto.py
