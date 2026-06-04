@@ -4,9 +4,9 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.config import DATA_PROCESSED, OUTPUT_FIGURES, PROCESSED_LISTINGS, RAW_LISTINGS, WEEKLY_SERIES, MONTHLY_SERIES
+from src.config import DATA_PROCESSED, OUTPUT_FIGURES, OUTPUT_TABLES, PROCESSED_LISTINGS, RAW_LISTINGS, WEEKLY_SERIES, MONTHLY_SERIES
 from src.plots import save_market_series_by_type, save_price_distribution, save_price_vs_age
-from src.preprocessing import build_monthly_market_series, build_weekly_market_series, clean_listings, load_raw_listings
+from src.preprocessing import build_monthly_market_series, build_seasonal_market_summary, build_weekly_market_series, clean_listings, load_raw_listings
 
 
 def main():
@@ -17,15 +17,18 @@ def main():
 
     DATA_PROCESSED.mkdir(parents=True, exist_ok=True)
     OUTPUT_FIGURES.mkdir(parents=True, exist_ok=True)
+    OUTPUT_TABLES.mkdir(parents=True, exist_ok=True)
 
     raw = load_raw_listings(RAW_LISTINGS)
     clean = clean_listings(raw)
     weekly = build_weekly_market_series(clean)
     monthly = build_monthly_market_series(clean)
+    seasonal = build_seasonal_market_summary(clean)
 
     clean.to_csv(PROCESSED_LISTINGS, index=False)
     weekly.to_csv(WEEKLY_SERIES, index=False)
     monthly.to_csv(MONTHLY_SERIES, index=False)
+    seasonal.to_csv(OUTPUT_TABLES / "seasonal_market_summary.csv", index=False)
 
     save_price_distribution(clean, OUTPUT_FIGURES / "01_price_distribution.png")
     save_price_vs_age(clean, OUTPUT_FIGURES / "02_price_vs_age.png")
@@ -39,6 +42,7 @@ def main():
     print(f"Saved: {PROCESSED_LISTINGS}")
     print(f"Saved: {WEEKLY_SERIES}")
     print(f"Saved: {MONTHLY_SERIES}")
+    print(f"Saved: {OUTPUT_TABLES / 'seasonal_market_summary.csv'}")
 
 
 if __name__ == "__main__":

@@ -21,6 +21,13 @@ REQUIRED_COLUMNS = [
     "has_documents",
 ]
 
+SEASON_ORDER = {
+    "winter": 1,
+    "spring": 2,
+    "summer": 3,
+    "autumn": 4,
+}
+
 
 def load_raw_listings(path):
     df = pd.read_csv(path)
@@ -69,8 +76,52 @@ def clean_listings(df):
     )
 
     df["observation_date"] = df["listing_date"]
+    add_seasonal_features(df)
 
     return df.sort_values("observation_date").reset_index(drop=True)
+
+
+def add_seasonal_features(df):
+    month = df["observation_date"].dt.month
+    df["season"] = np.select(
+        [month.isin([12, 1, 2]), month.isin([3, 4, 5]), month.isin([6, 7, 8])],
+        ["winter", "spring", "summer"],
+        default="autumn",
+    )
+    df["riding_season"] = month.between(4, 10)
+    return df
+
+
+def build_seasonal_market_summary(df):
+    season_summary = summarize_market_groups(df, "season", "season")
+    season_summary["sort_order"] = season_summary["period_label"].map(SEASON_ORDER)
+
+    riding_df = df.copy()
+    riding_df["riding_period"] = np.where(riding_df["riding_season"], "riding_season_apr_oct", "off_season_nov_mar")
+    riding_summary = summarize_market_groups(riding_df, "riding_period", "riding_period")
+    riding_summary["sort_order"] = riding_summary["period_label"].map({"riding_season_apr_oct": 1, "off_season_nov_mar": 2})
+
+    summary = pd.concat([season_summary, riding_summary], ignore_index=True)
+    return summary.sort_values(["group_type", "sort_order"]).drop(columns="sort_order").reset_index(drop=True)
+
+
+def summarize_market_groups(df, group_col, group_type):
+    summary = (
+        df.groupby(group_col)
+        .agg(
+            listings_count=("price", "size"),
+            median_price=("price", "median"),
+            avg_price=("price", "mean"),
+            q25_price=("price", lambda value: value.quantile(0.25)),
+            q75_price=("price", lambda value: value.quantile(0.75)),
+            avg_km=("km", "mean"),
+            avg_age=("age", "mean"),
+        )
+        .reset_index()
+        .rename(columns={group_col: "period_label"})
+    )
+    summary.insert(0, "group_type", group_type)
+    return summary
 
 
 def build_weekly_market_series(df):
@@ -94,6 +145,7 @@ def build_market_series(df, frequency="W"):
             listings_count=("price", "count"),
             avg_km=("km", "mean"),
             avg_age=("age", "mean"),
+            riding_season_share=("riding_season", "mean"),
             vintage_share=("is_vintage", "mean"),
             youngtimer_share=("is_youngtimer", "mean"),
             two_stroke_share=("is_2stroke", "mean"),

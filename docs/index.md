@@ -92,6 +92,8 @@ Sul forecast generale il miglior modello è `random_forest`:
 
 La parte più solida emerge però dai cluster età/km. Alcuni cluster hanno MAPE sotto il 10%, quindi sono più utili per produrre raccomandazioni operative.
 
+La lettura stagionale mostra inoltre che la stagione motociclistica aprile-ottobre concentra più annunci, mentre i prezzi mediani osservati dipendono anche dal mix di moto disponibili nei diversi periodi dell'anno.
+
 ---
 
 ## Grafici Principali

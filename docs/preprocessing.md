@@ -56,6 +56,8 @@ Il preprocessing aggiunge variabili utili per analisi e modelli:
 | `is_youngtimer` | `1995 <= year < 2010` | Segmentazione storica |
 | `market_segment` | vintage / youngtimer / modern | Analisi per segmento |
 | `observation_date` | uguale a `listing_date` | Data di aggregazione |
+| `season` | winter / spring / summer / autumn | Lettura stagionale |
+| `riding_season` | aprile-ottobre | Stagione motociclistica |
 
 ---
 
@@ -82,11 +84,29 @@ Per ogni periodo vengono calcolate:
 | `vintage_share` | quota vintage |
 | `youngtimer_share` | quota youngtimer |
 | `two_stroke_share` | quota 2 tempi |
+| `riding_season_share` | quota osservazioni in stagione motociclistica |
 | `month`, `week_number` | feature temporali |
 
 ---
 
-## 5. Perché La Mediana
+## 5. Lettura Stagionale
+
+La pipeline produce anche `outputs/tables/seasonal_market_summary.csv`, che confronta prezzi e volumi per stagione e tra stagione motociclistica e fuori stagione.
+
+| Periodo | Annunci | Mediana |
+|---|---:|---:|
+| Riding season aprile-ottobre | 1328 | 5500 |
+| Off-season novembre-marzo | 563 | 6400 |
+| Winter | 287 | 6700 |
+| Spring | 823 | 5500 |
+| Summer | 422 | 5200 |
+| Autumn | 359 | 6000 |
+
+Nel dataset la stagione motociclistica ha più annunci ma prezzo mediano più basso. Questo non implica automaticamente che le moto valgano meno in stagione: può dipendere anche dal diverso mix di annunci disponibili.
+
+---
+
+## 6. Perché La Mediana
 
 Il target principale è `median_price`. La mediana è più adatta della media perché i prezzi degli annunci sono sbilanciati e possono includere outlier.
 
@@ -102,7 +122,7 @@ Nel contesto dell'usato, la mediana rappresenta meglio il prezzo tipico osservat
 
 ---
 
-## 6. Grafici Esplorativi
+## 7. Grafici Esplorativi
 
 Il preprocessing produce i primi grafici descrittivi:
 
