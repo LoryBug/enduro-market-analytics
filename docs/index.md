@@ -50,7 +50,7 @@ Copertura temporale:
 
 | Serie | Osservazioni | Periodo |
 |---|---:|---|
-| Settimanale | 312 | 2020-06 -> 2026-05 |
+| Settimanale | 262 | 2020-06 -> 2026-05 |
 | Mensile | 72 | 2020-06 -> 2026-05 |
 
 Tutte le osservazioni vengono trattate nello stesso modo. L'analisi si concentra sulla trasformazione degli annunci in serie temporali aggregate e raccomandazioni operative.

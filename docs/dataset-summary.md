@@ -15,7 +15,7 @@ data/raw/enduro_listings_raw.csv
 | `data/raw/enduro_listings_raw.csv` | Snapshot raw consolidato usato dalla pipeline | 1930 |
 | `data/processed/enduro_listings_clean.csv` | Dataset pulito derivato localmente | 1891 |
 
-Il dataset consolida osservazioni storiche e correnti del mercato enduro. Tutte le osservazioni vengono trattate nello stesso modo all'interno della pipeline.
+Il dataset consolida osservazioni storiche e correnti del mercato enduro. Tutte le serie usate dalla pipeline vengono derivate localmente da questo file.
 
 La colonna `snapshot_date` rappresenta il mese di osservazione del mercato ed e allineata alla fine del mese di `listing_date`.
 
@@ -37,7 +37,7 @@ python scripts/run_final_pipeline.py
 
 | Serie | Osservazioni |
 |---|---:|
-| Settimanale | 312 |
+| Settimanale | 262 |
 | Mensile | 72 |
 
 Periodo coperto:
@@ -99,13 +99,3 @@ Il forecast generale resta un benchmark. Il risultato operativo più utile è il
 - `outputs/tables/cluster_forecast_metrics.csv`
 - `outputs/tables/cluster_buying_scores.csv`
 - `outputs/tables/future_cluster_buy_recommendations.csv`
-
-## Dashboard
-
-La dashboard finale è:
-
-```text
-report/index.html
-```
-
-Contiene panoramica dataset, mediane, segmentazione età/km, forecast per cluster e finestre future di acquisto.

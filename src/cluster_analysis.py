@@ -41,10 +41,10 @@ def build_count_matrix(summary):
 
 
 def build_monthly_cluster_series(core):
+    core = core.copy()
+    core["period"] = core["observation_date"].dt.to_period("M").dt.to_timestamp("M")
     monthly = (
-        core.set_index("observation_date")
-        .groupby(["age_band", "km_band"], observed=True)
-        .resample("M")
+        core.groupby(["age_band", "km_band", "period"], observed=True)
         .agg(
             median_price=("price", "median"),
             avg_price=("price", "mean"),
@@ -53,12 +53,8 @@ def build_monthly_cluster_series(core):
             avg_age=("age", "mean"),
         )
         .reset_index()
-        .rename(columns={"observation_date": "period"})
     )
     monthly = add_cluster_id(monthly)
     monthly["week_number"] = monthly["period"].dt.isocalendar().week.astype(int)
     monthly["month"] = monthly["period"].dt.month
-    for col in ["median_price", "avg_price", "avg_km", "avg_age"]:
-        monthly[col] = monthly.groupby("cluster_id", observed=True)[col].transform(lambda value: value.interpolate(limit_direction="both"))
-    monthly["listings_count"] = monthly["listings_count"].fillna(0).astype(int)
-    return monthly
+    return monthly.sort_values(["cluster_id", "period"]).reset_index(drop=True)

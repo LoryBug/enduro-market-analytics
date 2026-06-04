@@ -39,9 +39,9 @@ Il risultato conferma che Random Forest sfrutta meglio le feature esplicative de
 
 | Cluster | Best model | RMSE | MAPE | Interpretazione |
 |---|---|---:|---:|---|
-| 11-20 / 0-5k | Random Forest | 89.19 | 1.81% | serie molto stabile nel test |
-| 3-5 / 0-5k | Seasonal naive | 741.96 | 8.21% | cluster ricco ma più variabile |
-| 6-10 / 0-5k | Random Forest | 568.37 | 8.87% | buon compromesso operativo |
+| 11-20 / 0-5k | Holt-Winters | 80.02 | 1.78% | serie molto stabile nel test |
+| 3-5 / 0-5k | Holt-Winters | 864.97 | 9.11% | cluster ricco ma più variabile |
+| 6-10 / 0-5k | Random Forest | 727.54 | 10.55% | buon compromesso operativo |
 
 ![Forecast cluster](img/11_cluster_forecast_rmse.png)
 
@@ -55,15 +55,15 @@ La migliore lettura operativa attuale è:
 
 | Periodo | Cluster | Prezzo previsto | Mediana storica | Buy score | Raccomandazione |
 |---|---|---:|---:|---:|---|
-| 2026-09 | 3-5 / 0-5k | 6200 | 7100 | 900 | strong_buy |
-| 2026-06 | 3-5 / 0-5k | 6800 | 7100 | 300 | good_buy |
-| 2026-07 | 3-5 / 0-5k | 6800 | 7100 | 300 | good_buy |
-| 2026-10 | 3-5 / 0-5k | 6800 | 7100 | 300 | good_buy |
-| 2026-11 | 3-5 / 0-5k | 6800 | 7100 | 300 | good_buy |
+| 2026-09 | 6-10 / 0-5k | 5804 | 6000 | 196 | good_buy |
+| 2026-08 | 6-10 / 0-5k | 5819 | 6000 | 181 | good_buy |
+| 2026-06 | 3-5 / 0-5k | 6925 | 7100 | 175 | neutral |
+| 2026-07 | 3-5 / 0-5k | 6925 | 7100 | 175 | neutral |
+| 2026-08 | 3-5 / 0-5k | 6925 | 7100 | 175 | neutral |
 
 ![Future buy windows](img/13_future_cluster_buy_windows.png)
 
-La raccomandazione non significa che tutto il mercato sara economico. Significa che, per il cluster specifico `3-5 anni / 0-5k km`, il modello stima prezzi sotto la mediana storica del cluster.
+La raccomandazione non significa che tutto il mercato sara economico. Significa che, per il cluster specifico `6-10 anni / 0-5k km`, il modello stima prezzi leggermente sotto la mediana storica del cluster.
 
 ---
 

@@ -20,34 +20,15 @@ Il dataset raw consolidato usato dalla pipeline finale è:
 data/raw/enduro_listings_raw.csv
 ```
 
-Il dataset raccoglie osservazioni storiche e correnti del mercato enduro in uno snapshot unico. Tutte le osservazioni vengono trattate nello stesso modo durante preprocessing, aggregazione, forecasting e raccomandazione.
-
-La repo mantiene versionati il dataset raw consolidato e gli output finali utili alla consegna. I file in `data/processed/` vengono rigenerati dalla pipeline e sono ignorati da Git.
+Il dataset raccoglie osservazioni storiche e correnti del mercato enduro in uno snapshot unico. Tutte le analisi derivano da questo file tramite preprocessing, aggregazione, forecasting e raccomandazione.
 
 ## Pipeline
 
-Esecuzione completa consigliata:
+Esecuzione completa:
 
 ```bash
 python scripts/run_final_pipeline.py
 ```
-
-Collector opzionali, da lanciare solo per raccolte locali fuori dalla pipeline finale:
-
-```bash
-python scripts/00_collect_wayback_moto.py
-python scripts/00_collect_live_moto.py
-```
-
-## Documentazione
-
-La documentazione completa del progetto è nella cartella `docs/`:
-
-- `docs/index.md`: panoramica, obiettivo, dati, approccio e grafici principali.
-- `docs/preprocessing.md`: pulizia dati, feature engineering e aggregazione temporale.
-- `docs/forecasting.md`: modelli, split temporale, metriche e risultati generali.
-- `docs/cluster_prescriptive.md`: segmentazione età/km, forecast per cluster e raccomandazioni.
-- `docs/conclusions.md`: confronto finale, limiti e conclusione operativa.
 
 ## Output Principali
 
@@ -58,23 +39,6 @@ La documentazione completa del progetto è nella cartella `docs/`:
 - `outputs/tables/age_km_price_matrix.csv`: matrice prezzo mediano per età e km.
 - `outputs/figures/*.png`: grafici generati dagli script.
 
-## Risultato Sintetico
+## Risultato
 
 Il forecast generale sul mercato completo è utile come baseline, ma l'errore resta alto perché la composizione degli annunci cambia nel tempo. Segmentando per età e chilometraggio si ottengono gruppi più omogenei, metriche migliori e consigli di acquisto più interpretabili.
-
-Esempio di output operativo:
-
-```text
-Settembre 2026 emerge come possibile finestra conveniente per il cluster 3-5 anni / 0-5k km, perché il prezzo previsto è sotto la mediana storica del cluster.
-```
-
-## Struttura
-
-```text
-data/raw/        dataset raw consolidato
-data/processed/  dataset derivati rigenerati localmente
-scripts/         pipeline eseguibile
-src/             funzioni riutilizzabili per preprocessing, modelli, metriche e plot
-outputs/         tabelle e figure finali versionate
-docs/            note metodologiche
-```

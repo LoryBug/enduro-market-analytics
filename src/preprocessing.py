@@ -102,17 +102,7 @@ def build_market_series(df, frequency="W"):
         .rename(columns={"observation_date": "period"})
     )
 
-    series["listings_count"] = series["listings_count"].fillna(0)
-    value_cols = [
-        "avg_price",
-        "median_price",
-        "avg_km",
-        "avg_age",
-        "vintage_share",
-        "youngtimer_share",
-        "two_stroke_share",
-    ]
-    series[value_cols] = series[value_cols].interpolate(limit_direction="both")
+    series = series[series["listings_count"] > 0].copy()
     series["week_number"] = series["period"].dt.isocalendar().week.astype(int)
     series["month"] = series["period"].dt.month
 
