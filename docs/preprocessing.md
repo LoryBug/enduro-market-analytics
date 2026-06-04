@@ -102,7 +102,7 @@ La pipeline produce anche `outputs/tables/seasonal_market_summary.csv`, che conf
 | Summer | 422 | 5200 |
 | Autumn | 359 | 6000 |
 
-Nel dataset la stagione motociclistica ha più annunci ma prezzo mediano più basso. Questo non implica automaticamente che le moto valgano meno in stagione: può dipendere anche dal diverso mix di annunci disponibili.
+Nel dataset la stagione motociclistica ha più annunci ma prezzo mediano più basso. Questo è coerente con l'idea che nei mesi di utilizzo aumenti l'offerta disponibile, ma non implica automaticamente causalità: può dipendere anche dal diverso mix di annunci disponibili.
 
 ---
 

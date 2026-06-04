@@ -57,4 +57,5 @@ def build_monthly_cluster_series(core):
     monthly = add_cluster_id(monthly)
     monthly["week_number"] = monthly["period"].dt.isocalendar().week.astype(int)
     monthly["month"] = monthly["period"].dt.month
+    monthly["riding_season_share"] = monthly["month"].between(4, 10).astype(float)
     return monthly.sort_values(["cluster_id", "period"]).reset_index(drop=True)

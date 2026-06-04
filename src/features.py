@@ -19,9 +19,9 @@ def make_lagged_features(series_df, target, lag_count=4):
         "vintage_share",
         "youngtimer_share",
         "two_stroke_share",
-        "month",
-        "week_number",
     ]
+    feature_cols += [col for col in ["riding_season_share"] if col in df.columns]
+    feature_cols += ["month", "week_number"]
 
     return df, feature_cols
 

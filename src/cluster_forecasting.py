@@ -27,6 +27,8 @@ def prepare_model_series(cluster_df):
     df["vintage_share"] = 0.0
     df["youngtimer_share"] = 0.0
     df["two_stroke_share"] = 0.0
+    if "riding_season_share" not in df.columns:
+        df["riding_season_share"] = df["period"].dt.month.between(4, 10).astype(float)
     return df
 
 
@@ -115,6 +117,7 @@ def recursive_random_forest_forecast(model_series, feature_cols, future_periods)
         row["vintage_share"] = 0.0
         row["youngtimer_share"] = 0.0
         row["two_stroke_share"] = 0.0
+        row["riding_season_share"] = float(4 <= period.month <= 10)
         row["month"] = period.month
         row["week_number"] = int(period.isocalendar().week)
         prediction = float(rf.predict(pd.DataFrame([row])[feature_cols])[0])

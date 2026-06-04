@@ -41,7 +41,7 @@ Il risultato conferma che Random Forest sfrutta meglio le feature esplicative de
 |---|---|---:|---:|---|
 | 11-20 / 0-5k | Holt-Winters | 80.02 | 1.78% | serie molto stabile nel test |
 | 3-5 / 0-5k | Holt-Winters | 864.97 | 9.11% | cluster ricco ma più variabile |
-| 6-10 / 0-5k | Random Forest | 727.54 | 10.55% | buon compromesso operativo |
+| 6-10 / 0-5k | Random Forest | 718.39 | 10.38% | buon compromesso operativo |
 
 ![Forecast cluster](img/11_cluster_forecast_rmse.png)
 
@@ -55,8 +55,8 @@ La migliore lettura operativa attuale è:
 
 | Periodo | Cluster | Prezzo previsto | Mediana storica | Buy score | Raccomandazione |
 |---|---|---:|---:|---:|---|
-| 2026-09 | 6-10 / 0-5k | 5804 | 6000 | 196 | good_buy |
-| 2026-08 | 6-10 / 0-5k | 5819 | 6000 | 181 | good_buy |
+| 2026-08 | 6-10 / 0-5k | 5789 | 6000 | 211 | good_buy |
+| 2026-09 | 6-10 / 0-5k | 5808 | 6000 | 192 | good_buy |
 | 2026-06 | 3-5 / 0-5k | 6925 | 7100 | 175 | neutral |
 | 2026-07 | 3-5 / 0-5k | 6925 | 7100 | 175 | neutral |
 | 2026-08 | 3-5 / 0-5k | 6925 | 7100 | 175 | neutral |

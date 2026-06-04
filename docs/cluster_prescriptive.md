@@ -111,13 +111,15 @@ Risultati principali:
 |---|---|---:|---:|---|
 | 11-20 / 0-5k | Holt-Winters | 80.02 | 1.78% | neutral |
 | 3-5 / 0-5k | Holt-Winters | 864.97 | 9.11% | neutral |
-| 6-10 / 0-5k | Random Forest | 727.54 | 10.55% | good_buy |
+| 6-10 / 0-5k | Random Forest | 718.39 | 10.38% | good_buy |
 
 ![Accuratezza cluster](img/11_cluster_forecast_rmse.png)
 
 ![Buying score cluster](img/12_cluster_buy_score.png)
 
 Il forecast per cluster è più interpretabile del forecast generale perché confronta moto più simili tra loro.
+
+Nei modelli per cluster viene inclusa anche la feature `riding_season_share`, che distingue la stagione motociclistica aprile-ottobre dai mesi fuori stagione.
 
 ---
 
@@ -135,8 +137,8 @@ Top raccomandazioni future:
 
 | Periodo | Cluster | Prezzo previsto | Mediana storica | Buy score | Valutazione |
 |---|---|---:|---:|---:|---|
-| 2026-09 | 6-10 / 0-5k | 5804 | 6000 | 196 | good_buy |
-| 2026-08 | 6-10 / 0-5k | 5819 | 6000 | 181 | good_buy |
+| 2026-08 | 6-10 / 0-5k | 5789 | 6000 | 211 | good_buy |
+| 2026-09 | 6-10 / 0-5k | 5808 | 6000 | 192 | good_buy |
 | 2026-06 | 3-5 / 0-5k | 6925 | 7100 | 175 | neutral |
 | 2026-07 | 3-5 / 0-5k | 6925 | 7100 | 175 | neutral |
 | 2026-08 | 3-5 / 0-5k | 6925 | 7100 | 175 | neutral |

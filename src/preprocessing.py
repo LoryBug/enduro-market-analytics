@@ -145,7 +145,6 @@ def build_market_series(df, frequency="W"):
             listings_count=("price", "count"),
             avg_km=("km", "mean"),
             avg_age=("age", "mean"),
-            riding_season_share=("riding_season", "mean"),
             vintage_share=("is_vintage", "mean"),
             youngtimer_share=("is_youngtimer", "mean"),
             two_stroke_share=("is_2stroke", "mean"),
