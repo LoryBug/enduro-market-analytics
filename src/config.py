@@ -1,3 +1,5 @@
+"""Project-wide configuration: paths, constants, thresholds."""
+
 from pathlib import Path
 
 

@@ -30,6 +30,17 @@ SEASON_ORDER = {
 
 
 def load_raw_listings(path):
+    """Load raw listings CSV and validate required columns.
+
+    Args:
+        path: Path to the raw CSV file.
+
+    Returns:
+        DataFrame with raw listings.
+
+    Raises:
+        ValueError: If any required column is missing.
+    """
     df = pd.read_csv(path)
     missing = [col for col in REQUIRED_COLUMNS if col not in df.columns]
     if missing:
@@ -38,6 +49,17 @@ def load_raw_listings(path):
 
 
 def _to_numeric(series):
+    """Convert a pandas Series to numeric, handling Italian-formatted numbers.
+
+    Strips non-numeric characters, replaces comma with dot for decimal
+    separator, and removes trailing ".0" strings.
+
+    Args:
+        series: Input Series (string, numeric, or mixed).
+
+    Returns:
+        Series with dtype float64.
+    """
     if pd.api.types.is_numeric_dtype(series):
         return pd.to_numeric(series, errors="coerce")
     cleaned = series.astype(str).str.replace(r"[^0-9.,-]", "", regex=True)
@@ -47,6 +69,18 @@ def _to_numeric(series):
 
 
 def clean_listings(df):
+    """Clean raw listings: parse dates, cast types, engineer features.
+
+    Steps: date parsing, numeric conversion, boolean coercion, filtering
+    invalid rows, and feature creation (age, km_per_year, price_per_cc,
+    segment flags, seasonal features).
+
+    Args:
+        df: Raw listings DataFrame.
+
+    Returns:
+        Cleaned and sorted DataFrame.
+    """
     df = df.copy()
     df["listing_date"] = pd.to_datetime(df["listing_date"], errors="coerce")
     if "snapshot_date" in df.columns:
@@ -82,6 +116,15 @@ def clean_listings(df):
 
 
 def add_seasonal_features(df):
+    """Add season and riding_season columns based on observation_date.
+
+    Args:
+        df: Listings DataFrame with 'observation_date' column.
+
+    Returns:
+        Same DataFrame with 'season' (winter/spring/summer/autumn) and
+        'riding_season' (True for Apr-Oct) columns.
+    """
     month = df["observation_date"].dt.month
     df["season"] = np.select(
         [month.isin([12, 1, 2]), month.isin([3, 4, 5]), month.isin([6, 7, 8])],
@@ -93,6 +136,15 @@ def add_seasonal_features(df):
 
 
 def build_seasonal_market_summary(df):
+    """Build seasonal comparison table (by season and by riding period).
+
+    Args:
+        df: Listings DataFrame with 'season' and 'riding_season' columns.
+
+    Returns:
+        DataFrame with listings count, median/avg/q prices, avg_km, avg_age
+        grouped by season and riding_period.
+    """
     season_summary = summarize_market_groups(df, "season", "season")
     season_summary["sort_order"] = season_summary["period_label"].map(SEASON_ORDER)
 
@@ -106,6 +158,16 @@ def build_seasonal_market_summary(df):
 
 
 def summarize_market_groups(df, group_col, group_type):
+    """Generic groupby summarizer for market segments.
+
+    Args:
+        df: Listings DataFrame.
+        group_col: Column name to group by.
+        group_type: Label for the group_type column.
+
+    Returns:
+        DataFrame with aggregated stats per group.
+    """
     summary = (
         df.groupby(group_col)
         .agg(
@@ -125,14 +187,46 @@ def summarize_market_groups(df, group_col, group_type):
 
 
 def build_weekly_market_series(df):
+    """Aggregate listings to weekly market series.
+
+    Args:
+        df: Clean listings DataFrame.
+
+    Returns:
+        Weekly aggregated market series.
+    """
     return build_market_series(df, frequency="W")
 
 
 def build_monthly_market_series(df):
+    """Aggregate listings to monthly market series.
+
+    Args:
+        df: Clean listings DataFrame.
+
+    Returns:
+        Monthly aggregated market series.
+    """
     return build_market_series(df, frequency="M")
 
 
 def build_market_series(df, frequency="W"):
+    """Core resampling aggregation: time-indexed market indicators.
+
+    Resamples listings by the given frequency and computes price metrics,
+    composition shares, and temporal features. Only periods with at least
+    one listing are kept.
+
+    Args:
+        df: Clean listings DataFrame.
+        frequency: Pandas offset string ('W' or 'M').
+
+    Returns:
+        DataFrame with one row per period.
+
+    Raises:
+        ValueError: If df is empty.
+    """
     if df.empty:
         raise ValueError("Cannot build market series from an empty listings dataset")
 

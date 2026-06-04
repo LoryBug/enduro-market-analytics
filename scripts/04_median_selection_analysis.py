@@ -29,12 +29,14 @@ SEGMENTS = {
 
 
 def load_working_listings():
+    """Load the clean processed listings."""
     df = pd.read_csv(PROCESSED_LISTINGS)
     df["observation_date"] = pd.to_datetime(df["observation_date"], errors="coerce")
     return df.copy()
 
 
 def assign_selected_segments(df):
+    """Label each listing with its market segment (core, maxi, vintage, full)."""
     full = df.copy()
     full["selected_segment"] = "full_market"
 
@@ -51,6 +53,7 @@ def assign_selected_segments(df):
 
 
 def monthly_medians(segmented):
+    """Aggregate listings to monthly medians per segment."""
     segmented = segmented.copy()
     segmented["period"] = segmented["observation_date"].dt.to_period("M").dt.to_timestamp("M")
     monthly = (
@@ -74,6 +77,7 @@ def monthly_medians(segmented):
 
 
 def segment_summary(monthly):
+    """Build a summary table comparing coverage across market segments."""
     rows = []
     for segment, group in monthly.groupby("selected_segment"):
         reliable = group[group["is_reliable_month"]]
@@ -99,6 +103,7 @@ def segment_summary(monthly):
 
 
 def save_core_plot(monthly):
+    """Plot full market vs core segment monthly median with reliability markers."""
     core = monthly[monthly["selected_segment"] == "core_modern_enduro_250_500"].copy()
     full = monthly[monthly["selected_segment"] == "full_market"].copy()
     reliable = core[core["is_reliable_month"]]
@@ -127,6 +132,7 @@ def save_core_plot(monthly):
 
 
 def save_markdown_summary(summary, monthly):
+    """Save a Markdown report explaining the segment selection rationale."""
     core = monthly[monthly["selected_segment"] == "core_modern_enduro_250_500"]
     core_reliable = core[core["is_reliable_month"]].copy()
     recent = core_reliable.sort_values("period").tail(8)
@@ -166,6 +172,7 @@ def save_markdown_summary(summary, monthly):
 
 
 def save_core_processed_series(monthly):
+    """Save the core segment monthly series for downstream forecasting."""
     core = monthly[monthly["selected_segment"] == "core_modern_enduro_250_500"].copy()
     core["week_number"] = core["period"].dt.isocalendar().week.astype(int)
     core["month"] = core["period"].dt.month
@@ -188,6 +195,7 @@ def save_core_processed_series(monthly):
 
 
 def main():
+    """Segment the market, compare coverage, save core series and plots."""
     OUTPUT_TABLES.mkdir(parents=True, exist_ok=True)
     listings = load_working_listings()
     segmented = assign_selected_segments(listings)

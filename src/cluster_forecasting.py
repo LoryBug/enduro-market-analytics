@@ -13,6 +13,15 @@ MIN_SUPERVISED_ROWS = 12
 
 
 def eligible_clusters(series, min_months=MIN_CLUSTER_MONTHS):
+    """Identify clusters with enough observed months for forecasting.
+
+    Args:
+        series: Monthly cluster series DataFrame.
+        min_months: Minimum number of unique months required.
+
+    Returns:
+        DataFrame of eligible clusters sorted by coverage.
+    """
     coverage = (
         series[series["listings_count"] > 0]
         .groupby("cluster_id")
@@ -23,6 +32,17 @@ def eligible_clusters(series, min_months=MIN_CLUSTER_MONTHS):
 
 
 def prepare_model_series(cluster_df):
+    """Prepare cluster DataFrame for supervised forecasting.
+
+    Ensures all expected feature columns exist (vintage/youngtimer/two_stroke
+    shares are set to 0 for clusters). Adds riding_season_share if missing.
+
+    Args:
+        cluster_df: Monthly series for a single cluster.
+
+    Returns:
+        DataFrame ready for make_lagged_features.
+    """
     df = cluster_df.copy().sort_values("period")
     df["vintage_share"] = 0.0
     df["youngtimer_share"] = 0.0
@@ -33,6 +53,18 @@ def prepare_model_series(cluster_df):
 
 
 def evaluate_cluster_models(model_series):
+    """Evaluate seasonal naive, Holt-Winters, and Random Forest on a cluster.
+
+    Creates lagged features, performs chronological train/test split, then
+    runs all three models and collects metrics.
+
+    Args:
+        model_series: Prepared cluster series (from prepare_model_series).
+
+    Returns:
+        Tuple of (metrics_df, predictions_df, feature_cols) or (None, None, None)
+        if too few observations.
+    """
     supervised, feature_cols = make_lagged_features(model_series, TARGET, LAG_COUNT)
     if len(supervised) < MIN_SUPERVISED_ROWS:
         return None, None, None
@@ -61,6 +93,14 @@ def evaluate_cluster_models(model_series):
 
 
 def label_recommendation(score_pct):
+    """Convert a current buy score percentage into a human-readable label.
+
+    Args:
+        score_pct: Buy score as percentage of historical median.
+
+    Returns:
+        Label string (good_buy_window/slightly_convenient/expensive_window/neutral).
+    """
     if score_pct >= 10:
         return "good_buy_window"
     if score_pct >= 3:
@@ -71,6 +111,19 @@ def label_recommendation(score_pct):
 
 
 def build_cluster_buying_scores(series, metrics):
+    """Compute current buying scores for each eligible cluster.
+
+    For each cluster, picks the best model by RMSE, compares the latest
+    observed median price to the historical cluster median, and produces
+    a buy score with recommendation label.
+
+    Args:
+        series: Monthly cluster series DataFrame.
+        metrics: Cluster forecast metrics DataFrame.
+
+    Returns:
+        DataFrame with buy scores sorted by descending score.
+    """
     best_models = metrics.sort_values(["cluster_id", "RMSE"]).groupby("cluster_id").first().reset_index()
     rows = []
     for _, best in best_models.iterrows():
@@ -98,6 +151,20 @@ def build_cluster_buying_scores(series, metrics):
 
 
 def recursive_random_forest_forecast(model_series, feature_cols, future_periods):
+    """Iterative multi-step forecast using Random Forest.
+
+    Each forecast step feeds the previous prediction back as a lag feature,
+    allowing multi-step ahead forecasting. Exogenous features (avg_km,
+    avg_age, riding_season_share, month, week_number) are projected forward.
+
+    Args:
+        model_series: Prepared cluster series.
+        feature_cols: List of feature column names.
+        future_periods: List of future period timestamps.
+
+    Returns:
+        List of forecast values, one per future period.
+    """
     supervised, _ = make_lagged_features(model_series, TARGET, LAG_COUNT)
     rf = train_random_forest(supervised[feature_cols], supervised[TARGET])
     history = model_series[TARGET].tolist()
@@ -128,6 +195,21 @@ def recursive_random_forest_forecast(model_series, feature_cols, future_periods)
 
 
 def forecast_future(model_series, best_model, feature_cols, future_periods):
+    """Generate future forecasts using the best model for a cluster.
+
+    Dispatches to seasonal naive, Holt-Winters, or recursive RF based on
+    the best_model string.
+
+    Args:
+        model_series: Prepared cluster series.
+        best_model: Name of the best model ('seasonal_naive', 'holt_winters',
+                     or 'random_forest').
+        feature_cols: Feature columns (only used for RF).
+        future_periods: List of future period timestamps.
+
+    Returns:
+        List (or array) of forecast values.
+    """
     values = model_series[TARGET].values
     horizon = len(future_periods)
     if best_model == "seasonal_naive":
@@ -138,6 +220,17 @@ def forecast_future(model_series, best_model, feature_cols, future_periods):
 
 
 def label_future_recommendation(score_pct):
+    """Convert a future buy score percentage into a recommendation label.
+
+    Thresholds: >=10% → strong_buy, >=3% → good_buy, <=-10% → avoid_expensive,
+    otherwise neutral.
+
+    Args:
+        score_pct: Buy score as percentage of historical cluster median.
+
+    Returns:
+        Recommendation label string.
+    """
     if score_pct >= 10:
         return "strong_buy"
     if score_pct >= 3:

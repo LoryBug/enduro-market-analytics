@@ -15,6 +15,7 @@ from src.segments import add_age_km_bands, filter_core_market
 
 
 def load_core_market():
+    """Load processed listings and filter to core market with age/km bands."""
     df = pd.read_csv(PROCESSED_LISTINGS)
     df["observation_date"] = pd.to_datetime(df["observation_date"], errors="coerce")
     core = add_age_km_bands(filter_core_market(df))
@@ -23,6 +24,7 @@ def load_core_market():
 
 
 def build_buying_advice(summary):
+    """Compute value labels and buying notes per age/km cluster."""
     usable = summary[summary["listings_count"] > 0].copy()
     baseline = usable.loc[usable["listings_count"] >= MIN_CLUSTER_COUNT, "median_price"].median()
     if pd.isna(baseline):
@@ -53,6 +55,7 @@ def build_buying_advice(summary):
 
 
 def make_buying_note(row):
+    """Generate a human-readable buying note for a cluster row."""
     if row["coverage_status"] == "weak":
         return "Interpretare con cautela: cluster con pochi annunci."
     if row["value_label"] == "cheap":
@@ -65,6 +68,7 @@ def make_buying_note(row):
 
 
 def save_heatmap(matrix, count_matrix, path):
+    """Save annotated heatmap of median prices by age/km cluster."""
     fig, ax = plt.subplots(figsize=(9, 5.8))
     values = matrix.to_numpy(dtype=float)
     masked = np.ma.masked_invalid(values)
@@ -95,6 +99,7 @@ def save_heatmap(matrix, count_matrix, path):
 
 
 def save_band_boxplot(core, dimension, path):
+    """Save boxplot of price distribution by age or km band."""
     if dimension == "age_band":
         labels = AGE_LABELS
         title = "Price distribution by age band"
@@ -125,6 +130,7 @@ def save_band_boxplot(core, dimension, path):
 
 
 def save_markdown(summary, buying_advice, matrix, count_matrix):
+    """Save a Markdown report of cluster analysis and buying advice."""
     strong = summary[summary["coverage_status"] == "strong"]
     weak = summary[summary["coverage_status"] == "weak"]
     empty = summary[summary["coverage_status"] == "empty"]
@@ -166,9 +172,9 @@ def save_markdown(summary, buying_advice, matrix, count_matrix):
 
 
 def main():
+    """Build age/km cluster summaries, matrices, buying advice, and plots."""
     OUTPUT_TABLES.mkdir(parents=True, exist_ok=True)
     OUTPUT_FIGURES.mkdir(parents=True, exist_ok=True)
-
     core = load_core_market()
     summary = build_cluster_summary(core)
     price_matrix = build_price_matrix(summary)

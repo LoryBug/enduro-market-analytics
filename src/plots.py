@@ -12,6 +12,17 @@ SEGMENT_COLORS = {
 
 
 def add_motorcycle_type(df):
+    """Classify each listing into a plot-friendly motorcycle type category.
+
+    Categories: 'core modern 250-500', 'maxi 690/701', 'youngtimer',
+    'vintage', or 'other modern'.
+
+    Args:
+        df: Listings DataFrame.
+
+    Returns:
+        DataFrame with added 'motorcycle_type' column.
+    """
     plot_df = df.copy()
     plot_df["motorcycle_type"] = "other modern"
     plot_df.loc[plot_df["market_segment"] == "youngtimer", "motorcycle_type"] = "youngtimer"
@@ -27,6 +38,15 @@ def add_motorcycle_type(df):
 
 
 def save_price_distribution(df, path):
+    """Save histogram of asking prices, coloured by motorcycle type.
+
+    Overlays median and mean vertical lines. Hides the top 1% price
+    outliers from the x-axis for readability.
+
+    Args:
+        df: Listings DataFrame.
+        path: Output figure file path (PNG).
+    """
     fig, ax = plt.subplots(figsize=(9, 5.2))
     plot_df = add_motorcycle_type(df).dropna(subset=["price"])
     prices = plot_df["price"]
@@ -61,6 +81,15 @@ def save_price_distribution(df, path):
 
 
 def save_price_vs_age(df, path):
+    """Save scatter plot of price vs age, coloured by motorcycle type.
+
+    Includes a linear trend line for the core modern 250-500 segment.
+    Hides top 1% price outliers for readability.
+
+    Args:
+        df: Listings DataFrame.
+        path: Output figure file path (PNG).
+    """
     fig, ax = plt.subplots(figsize=(9, 5.2))
     plot_df = add_motorcycle_type(df).dropna(subset=["age", "price"]).copy()
     y_limit = plot_df["price"].quantile(0.99)
@@ -95,6 +124,13 @@ def save_price_vs_age(df, path):
 
 
 def save_market_series(series, target, path):
+    """Save simple line plot of a market time series.
+
+    Args:
+        series: DataFrame with 'period' and target columns.
+        target: Name of the column to plot.
+        path: Output figure file path (PNG).
+    """
     fig, ax = plt.subplots(figsize=(10, 5))
     ax.plot(series["period"], series[target], marker="o", linewidth=1.5, color="#2563eb")
     ax.set_title(f"Market time series: {target}")
@@ -108,6 +144,17 @@ def save_market_series(series, target, path):
 
 
 def save_market_series_by_type(df, target, freq, path):
+    """Save multi-line time series plot, one line per motorcycle type.
+
+    Applies 3-period rolling median smoothing. Skips types with fewer
+    than 20 total listings.
+
+    Args:
+        df: Listings DataFrame.
+        target: Target column for median price aggregation.
+        freq: Pandas offset string ('W' or 'M').
+        path: Output figure file path (PNG).
+    """
     plot_df = add_motorcycle_type(df).dropna(subset=["observation_date", target]).copy()
     plot_df["period"] = plot_df["observation_date"].dt.to_period(freq).dt.to_timestamp("W" if freq == "W" else "M")
     grouped = (
@@ -137,6 +184,15 @@ def save_market_series_by_type(df, target, freq, path):
 
 
 def save_seasonal_market_summary(summary, path):
+    """Save dual bar chart: listings count and median price by season.
+
+    Displays both seasonal (winter/spring/summer/autumn) and riding-period
+    (Apr-Oct vs Nov-Mar) groupings side by side.
+
+    Args:
+        summary: Seasonal market summary DataFrame.
+        path: Output figure file path (PNG).
+    """
     plot_df = summary.copy()
     plot_df["label"] = plot_df["period_label"].replace(
         {
@@ -176,6 +232,13 @@ def save_seasonal_market_summary(summary, path):
 
 
 def save_forecast_comparison(predictions, target, path):
+    """Save line plot comparing actual vs all model predictions.
+
+    Args:
+        predictions: DataFrame with 'period', 'actual', and model columns.
+        target: Name of the target (used in title).
+        path: Output figure file path (PNG).
+    """
     fig, ax = plt.subplots(figsize=(10, 5))
     ax.plot(predictions["period"], predictions["actual"], marker="o", label="Actual")
     for col in predictions.columns:
@@ -193,6 +256,12 @@ def save_forecast_comparison(predictions, target, path):
 
 
 def save_metrics_bar(metrics_df, path):
+    """Save bar chart of RMSE by model, annotated with MAPE values.
+
+    Args:
+        metrics_df: DataFrame with 'model', 'RMSE', 'MAPE' columns.
+        path: Output figure file path (PNG).
+    """
     metrics_df = metrics_df.sort_values("RMSE")
     fig, ax = plt.subplots(figsize=(8.5, 5))
     bars = ax.bar(metrics_df["model"], metrics_df["RMSE"], color=["#16a34a", "#2563eb", "#f59e0b", "#dc2626"][: len(metrics_df)])

@@ -10,6 +10,7 @@ from src.preprocessing import build_monthly_market_series, build_seasonal_market
 
 
 def main():
+    """Load raw listings, clean, engineer features, build time series and seasonal summary."""
     if not RAW_LISTINGS.exists():
         raise FileNotFoundError(
             f"Missing raw dataset: {RAW_LISTINGS}. Copy the template and fill it with collected listings."

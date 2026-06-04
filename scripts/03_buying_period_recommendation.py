@@ -10,6 +10,7 @@ from src.config import FORECAST_TARGET, OUTPUT_TABLES
 
 
 def main():
+    """Compare best-model predictions to historical median and flag good buying periods."""
     predictions_path = OUTPUT_TABLES / "predictions.csv"
     metrics_path = OUTPUT_TABLES / "metrics.csv"
     if not predictions_path.exists() or not metrics_path.exists():

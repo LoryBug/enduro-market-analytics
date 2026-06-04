@@ -13,12 +13,14 @@ from src.config import OUTPUT_FIGURES, OUTPUT_TABLES
 
 SERIES_PATH = OUTPUT_TABLES / "age_km_monthly_cluster_series.csv"
 def load_cluster_series():
+    """Load the monthly cluster series CSV."""
     if not SERIES_PATH.exists():
         raise FileNotFoundError("Run scripts/05_age_km_market_insights.py before cluster forecasting")
     return pd.read_csv(SERIES_PATH, parse_dates=["period"])
 
 
 def forecast_cluster(cluster_df, cluster_id):
+    """Run all forecasting models on a single cluster and return metrics + predictions."""
     model_series = prepare_model_series(cluster_df)
     metrics_df, predictions, _feature_cols = evaluate_cluster_models(model_series)
     if metrics_df is None:
@@ -30,6 +32,7 @@ def forecast_cluster(cluster_df, cluster_id):
 
 
 def save_cluster_metrics_plot(metrics):
+    """Save bar chart of best MAPE per cluster."""
     best = metrics.sort_values(["cluster_id", "RMSE"]).groupby("cluster_id").first().reset_index()
     plt.figure(figsize=(11, 5.5))
     labels = best["cluster_id"].str.replace("__", " / ")
@@ -47,6 +50,7 @@ def save_cluster_metrics_plot(metrics):
 
 
 def save_buy_score_plot(scores):
+    """Save bar chart of current buy scores per cluster."""
     plt.figure(figsize=(11, 5.5))
     labels = scores["cluster_id"].str.replace("__", " / ")
     colors = ["#16a34a" if value > 0 else "#dc2626" for value in scores["buy_score"]]
@@ -62,6 +66,7 @@ def save_buy_score_plot(scores):
 
 
 def main():
+    """Forecast eligible clusters, save metrics, predictions, buying scores and plots."""
     OUTPUT_TABLES.mkdir(parents=True, exist_ok=True)
     OUTPUT_FIGURES.mkdir(parents=True, exist_ok=True)
     series = load_cluster_series()

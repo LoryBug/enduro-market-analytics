@@ -17,11 +17,13 @@ PIPELINE_STEPS = [
 
 
 def run_step(script_path):
+    """Run a single pipeline script via subprocess."""
     print(f"\n==> {script_path}", flush=True)
     subprocess.run([sys.executable, script_path], cwd=PROJECT_ROOT, check=True)
 
 
 def main():
+    """Execute all pipeline steps in order (01–07)."""
     for step in PIPELINE_STEPS:
         run_step(step)
 

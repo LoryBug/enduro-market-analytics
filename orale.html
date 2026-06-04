@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="it" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enduro Market Analytics — Guida Orale</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config={darkMode:"class",theme:{extend:{fontFamily:{sans:["Inter","system-ui","sans-serif"],mono:["Fira Code","Monaco","monospace"]}}}}</script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        *{box-sizing:border-box}
+        .flashcard-3d{perspective:1000px;cursor:pointer}
+        .flashcard-3d .inner{transition:transform 0.6s;transform-style:preserve-3d;min-height:120px}
+        .flashcard-3d.flipped .inner{transform:rotateY(180deg)}
+        .flashcard-3d .front,.flashcard-3d .back{backface-visibility:hidden;position:absolute;top:0;left:0;width:100%;height:100%}
+        .flashcard-3d .back{transform:rotateY(180deg)}
+        .quiz-option{border:2px solid transparent;transition:all .2s}
+        .quiz-option:hover{border-color:#3b82f6}
+        .quiz-option:disabled{cursor:default;opacity:.7}
+        .quiz-option.correct,.correct{border-color:#22c55e!important;background:#22c55e20!important}
+        .quiz-option.incorrect,.incorrect{border-color:#ef4444!important;background:#ef444420!important}
+        .progress-bar{transition:width .4s ease}
+        .toc-link{transition:all .2s;border-left:2px solid transparent}
+        .toc-link.active{border-left-color:#3b82f6;color:#3b82f6;font-weight:600}
+        .slide-in{opacity:0;transform:translateY(20px);transition:opacity .6s,transform .6s}
+        .slide-in.visible{opacity:1;transform:translateY(0)}
+        pre code{font-size:.85rem;border-radius:.5rem}
+        .tab-btn.active{border-bottom:2px solid #3b82f6;color:#3b82f6;font-weight:600}
+    </style>
+</head>
+<body class="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen transition-colors duration-300">
+    <nav class="sticky top-0 z-50 bg-white/95 dark:bg-slate-800/95 backdrop-blur border-b border-slate-200 dark:border-slate-700">
+        <div class="max-w-6xl mx-auto px-4 flex items-center justify-between h-14">
+            <span class="font-bold text-blue-600 dark:text-blue-400 text-sm sm:text-base">&lt;EMA /&gt; Orale</span>
+            <div class="flex items-center gap-3">
+                <button onclick="document.getElementById('toc-panel').classList.toggle('hidden');document.getElementById('toc-overlay').classList.toggle('hidden')" class="lg:hidden p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
+                <button onclick="toggleTheme()" class="theme-toggle p-2 rounded-lg bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors" aria-label="Toggle theme">
+                    <svg class="w-4 h-4 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                    <svg class="w-4 h-4 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div id="toc-overlay" onclick="this.classList.add('hidden');document.getElementById('toc-panel').classList.add('hidden')" class="hidden fixed inset-0 bg-black/40 z-40 lg:hidden"></div>
+
+    <div class="max-w-6xl mx-auto px-4 flex gap-6 relative">
+        <aside id="toc-panel" class="hidden lg:block w-56 shrink-0 py-6">
+            <div class="sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto space-y-1 text-sm pr-2">
+                <div class="text-xs uppercase tracking-wider text-slate-400 font-semibold mb-3 px-3">Indice</div>
+                <div id="toc"></div>
+                <hr class="my-4 border-slate-200 dark:border-slate-700">
+                <a href="#flashcards" class="toc-link block px-3 py-1.5 rounded text-slate-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-slate-800">Flashcard</a>
+                <a href="#quiz" class="toc-link block px-3 py-1.5 rounded text-slate-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-slate-800">Quiz</a>
+                <a href="#domande" class="toc-link block px-3 py-1.5 rounded text-slate-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-slate-800">Domande professore</a>
+            </div>
+        </aside>
+
+        <main class="flex-1 min-w-0 py-6 space-y-10">
+
+            <!-- HERO -->
+            <section class="slide-in visible">
+                <div class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-slate-900 rounded-2xl p-6 sm:p-8">
+                    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2">Enduro Market Analytics</h1>
+                    <p class="text-slate-600 dark:text-slate-400 text-base sm:text-lg mb-4">Guida completa alla discussione orale</p>
+                    <div class="flex flex-wrap gap-2 text-xs sm:text-sm">
+                        <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-full font-medium">Operational Analytics</span>
+                        <span class="px-3 py-1 bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 rounded-full font-medium">Time Series</span>
+                        <span class="px-3 py-1 bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 rounded-full font-medium">Forecasting</span>
+                        <span class="px-3 py-1 bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 rounded-full font-medium">Prescriptive</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 1. OBBIETTIVO -->
+            <section id="obiettivo" class="slide-in"><h2 class="text-xl sm:text-2xl font-bold mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-lg flex items-center justify-center text-sm font-bold shrink-0">1</span> Obiettivo del progetto</h2>
+                <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-5 space-y-3">
+                    <p><strong>Non</strong> stimare il prezzo esatto di una moto usata (troppo rumoroso).</p>
+                    <p>Obiettivo: <strong>supportare decisioni di acquisto</strong> nel mercato delle enduro usate, identificando <em>quando</em> e <em>quale tipo</em> di moto conviene comprare.</p>
+                    <div class="bg-white dark:bg-slate-900 rounded-lg p-4 border border-slate-200 dark:border-slate-700 text-sm">
+                        <p class="font-semibold mb-1">Approccio</p>
+                        <p>Trasformiamo gli annunci raw in <strong>serie temporali mensili</strong> del prezzo mediano, poi applichiamo forecasting e prescrizione per cluster età/km.</p>
+                    </div>
+                    <div class="grid sm:grid-cols-3 gap-3 text-center text-sm mt-3">
+                        <div class="bg-white dark:bg-slate-900 rounded-lg p-3 border border-slate-200 dark:border-slate-700"><span class="font-semibold text-blue-600">Descriptive</span><br>Pulizia, segmenti, cluster, heatmap</div>
+                        <div class="bg-white dark:bg-slate-900 rounded-lg p-3 border border-slate-200 dark:border-slate-700"><span class="font-semibold text-green-600">Predictive</span><br>Forecast generale + per cluster</div>
+                        <div class="bg-white dark:bg-slate-900 rounded-lg p-3 border border-slate-200 dark:border-slate-700"><span class="font-semibold text-purple-600">Prescriptive</span><br>Buy score + raccomandazioni</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. DATASET -->
+            <section id="dataset" class="slide-in"><h2 class="text-xl sm:text-2xl font-bold mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-lg flex items-center justify-center text-sm font-bold shrink-0">2</span> Dataset</h2>
+                <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-5 space-y-3">
+                    <table class="w-full text-sm">
+                        <thead><tr class="border-b border-slate-300 dark:border-slate-600"><th class="text-left py-2">Proprietà</th><th class="text-left py-2">Valore</th></tr></thead>
+                        <tbody>
+                            <tr class="border-b border-slate-200 dark:border-slate-700"><td class="py-2">Fonte</td><td>Subito.it annunci enduro usate</td></tr>
+                            <tr class="border-b border-slate-200 dark:border-slate-700"><td class="py-2">Periodo</td><td>2021 – 2025</td></tr>
+                            <tr class="border-b border-slate-200 dark:border-slate-700"><td class="py-2">Annunci raw</td><td>1930</td></tr>
+                            <tr class="border-b border-slate-200 dark:border-slate-700"><td class="py-2">Annunci puliti</td><td>1891</td></tr>
+                            <tr><td class="py-2">Colonne principali</td><td><code>price, age, km, engine_cc, year, condition, market_segment, observation_date</code></td></tr>
+                        </tbody>
+                    </table>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mt-2">File unico: <code>data/raw/enduro_listings_raw.csv</code>. Tutti i dataset derivati sono rigenerabili via pipeline.</p>
+                </div>
+            </section>
+
+            <!-- 3. PIPELINE VISUAL -->
+            <section id="pipeline" class="slide-in"><h2 class="text-xl sm:text-2xl font-bold mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-lg flex items-center justify-center text-sm font-bold shrink-0">3</span> Pipeline architettura</h2>
+                <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-5">
+                    <div class="mermaid">
+flowchart TD
+    RAW["&lt;b&gt;enduro_listings_raw.csv&lt;/b&gt;&lt;br&gt;1930 annunci"] --> CLEAN["&lt;b&gt;01_preprocess.py&lt;/b&gt;&lt;br&gt;Pulizia + feature engineering&lt;br&gt;1891 annunci puliti"]
+    CLEAN --> WS["Serie settimanale&lt;br&gt;262 settimane"]
+    CLEAN --> MS["Serie mensile&lt;br&gt;72 mesi"]
+    MS --> FG["&lt;b&gt;02_train_forecasting_models.py&lt;/b&gt;&lt;br&gt;Forecast generale mercato"]
+    FG --> METRICS["Metriche generali&lt;br&gt;RF MAE 1402"]
+    MS --> BR["&lt;b&gt;03_buying_period_recommendation.py&lt;/b&gt;&lt;br&gt;Prima indicazione acquisto"]
+    CLEAN --> SM["&lt;b&gt;04_median_selection_analysis.py&lt;/b&gt;&lt;br&gt;Filtro core market&lt;br&gt;250-500cc, modern, 1000-20000€"]
+    SM --> CORE["Core modern enduro&lt;br&gt;894 annunci"]
+    CORE --> CLUST_DESC["&lt;b&gt;05_age_km_market_insights.py&lt;/b&gt;&lt;br&gt;Cluster età/km + matrici"]
+    CLUST_DESC --> CLUST_SERIES["Serie mensili per cluster&lt;br&gt;age_km_monthly_cluster_series.csv"]
+    CLUST_SERIES --> CLUST_FG["&lt;b&gt;06_cluster_forecasting.py&lt;/b&gt;&lt;br&gt;Forecast per cluster&lt;br&gt;solo cluster con &gt;=20 mesi"]
+    CLUST_FG --> CLUST_METRICS["Metriche cluster&lt;br&gt;Migliore: HW 11-20/0-5k MAPE 1.78%"]
+    CLUST_FG --> CLUST_BUY["Buy score attuale"]
+    CLUST_METRICS --> FINAL["&lt;b&gt;07_future_buy_forecast.py&lt;/b&gt;&lt;br&gt;Forecast futuro + buy_score"]
+    FINAL --> RECO["Raccomandazione finale&lt;br&gt;&lt;b&gt;Agosto 2026, 6-10/0-5k, good_buy&lt;/b&gt;"]
+    style RAW fill:#fef3c7,stroke:#d97706
+    style RECO fill:#d1fae5,stroke:#059669
+    style FG fill:#dbeafe,stroke:#2563eb
+    style CLUST_FG fill:#dbeafe,stroke:#2563eb
+    style FINAL fill:#e9d5ff,stroke:#9333ea
+    style SM fill:#fce7f3,stroke:#db2777
+    style CLUST_DESC fill:#fce7f3,stroke:#db2777
+                    </div>
+                    <p class="text-xs text-slate-400 mt-3 text-center">Comando unico: <code>python scripts/run_final_pipeline.py</code> → esegue 01–07 in ordine.</p>
+                </div>
+            </section>
+
+            <!-- 4. TEORIA SCELTE -->
+            <section id="teoria" class="slide-in"><h2 class="text-xl sm:text-2xl font-bold mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-lg flex items-center justify-center text-sm font-bold shrink-0">4</span> Scelte metodologiche & teoria</h2>
+                <div class="space-y-3">
+                    <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-5">
+                        <h3 class="font-bold text-blue-600 dark:text-blue-400 mb-2">Perché la mediana e non la media?</h3>
+                        <p>Il mercato dell'usato contiene outlier: moto quasi nuove, mezzi d'epoca, annunci sovraprezzati, occasioni. La <strong>mediana</strong> è robusta agli outlier (breakdown point 50%), la media no. La serie temporale risulta più stabile.</p>
+                        <div class="mt-2 text-xs bg-white dark:bg-slate-900 rounded p-2 border border-slate-200 dark:border-slate-700"><code class="text-blue-600 dark:text-blue-400">median_price</code> è il target principale in tutta la pipeline.</div>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-5">
+                        <h3 class="font-bold text-blue-600 dark:text-blue-400 mb-2">Perché frequenza mensile?</h3>
+                        <p>Compromesso tra <strong>dettaglio temporale</strong> e <strong>stabilità statistica</strong>. Il dato giornaliero o settimanale è troppo sparso: molte settimane hanno 1–2 annunci, la mediana settimanale è rumorosa. Il mese garantisce abbastanza osservazioni per una mediana sensata.</p>
+                        <div class="mt-2 text-xs text-slate-500 dark:text-slate-400">72 mesi di osservazioni, ~26 annunci/mese in media.</div>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-5">
+                        <h3 class="font-bold text-blue-600 dark:text-blue-400 mb-2">Perché non regressione sul singolo annuncio?</h3>
+                        <p>Il prezzo del singolo annuncio dipende da fattori <strong>non osservati</strong>: manutenzione, stato reale, accessori, urgenza del venditore, qualità delle foto. Stimare il prezzo di una moto specifica è un problema diverso. Noi vogliamo capire <em>quando un segmento di mercato è conveniente</em>.</p>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-5">
+                        <h3 class="font-bold text-blue-600 dark:text-blue-400 mb-2">Perché cluster età/km?</h3>
+                        <p>Età e chilometraggio sono i due driver intuitivi del prezzo di un usato. Suddividendo il core market in fasce (età: 0-2, 3-5, 6-10, 11-20, 20+; km: 0-5k, 5-10k, 10-15k, 15k+) otteniamo gruppi più <strong>omogenei</strong>. La raccomandazione diventa: "quando comprare <em>quale tipo</em> di moto".</p>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-5">
+                        <h3 class="font-bold text-blue-600 dark:text-blue-400 mb-2">Perché segmento core 250-500cc?</h3>
+                        <p>Il mercato completo è eterogeneo: vintage, youngtimer e maxi enduro hanno logiche di prezzo diverse. Il <strong>core market</strong> (enduro moderne 250-500cc, 1000-20000€) è il sotto-mercato più coerente per forecasting operativo.</p>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-5">
+                        <h3 class="font-bold text-blue-600 dark:text-blue-400 mb-2">Perché non interpolazione?</h3>
+                        <p>Non abbiamo riempito mesi senza annunci con valori interpolati. Le serie cluster usano solo <strong>mesi con annunci reali</strong>. Scelta più difendibile: non introduciamo informazione artificiale. I cluster con meno di 20 mesi osservati vengono esclusi dal forecast.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. MODELLI -->
+            <section id="modelli" class="slide-in"><h2 class="text-xl sm:text-2xl font-bold mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-lg flex items-center justify-center text-sm font-bold shrink-0">5</span> Modelli di forecasting</h2>
+                <div class="grid sm:grid-cols-2 gap-3">
+                    <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-5">
+                        <h3 class="font-bold mb-1">Seasonal Naive</h3>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 mb-2">Baseline: ripete il valore dello stesso mese dell'anno prima.</p>
+                        <span class="text-xs px-2 py-0.5 bg-gray-100 dark:bg-gray-700 rounded">Serve per capire se i modelli avanzati aggiungono valore.</span>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-5">
+                        <h3 class="font-bold mb-1">Holt-Winters</h3>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 mb-2">Exponential smoothing con livello, trend e stagionalità.</p>
+                        <span class="text-xs px-2 py-0.5 bg-gray-100 dark:bg-gray-700 rounded">Modello statistico interpretabile, funziona bene su cluster stabili (11-20/0-5k).</span>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-5">
+                        <h3 class="font-bold mb-1">Random Forest</h3>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 mb-2">Tree-based ensemble: usa lag, rolling features e variabili esplicative.</p>
+                        <span class="text-xs px-2 py-0.5 bg-gray-100 dark:bg-gray-700 rounded">Migliore sul forecast generale (MAE 1402) e su cluster 6-10/0-5k.</span>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-5">
+                        <h3 class="font-bold mb-1">MLP</h3>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 mb-2">Neural network a 2 layer nascosti.</p>
+                        <span class="text-xs px-2 py-0.5 bg-gray-100 dark:bg-gray-700 rounded">Confronto non lineare. Su dataset piccolo è instabile (non è la scelta principale).</span>
+                    </div>
+                </div>
+                <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-5 mt-3">
+                    <h3 class="font-bold mb-2">Feature engineering</h3>
+                    <p class="text-sm mb-2">I lag trasformano la serie temporale in un problema supervisionato:</p>
+                    <pre class="bg-white dark:bg-slate-900 rounded p-3 text-xs overflow-x-auto"><code>feature_cols = [
+    "median_price_lag_1", "median_price_lag_2", "median_price_lag_3", "median_price_lag_4",
+    "rolling_mean_4", "rolling_std_4",
+    "listings_count", "avg_km", "avg_age",
+    "vintage_share", "youngtimer_share", "two_stroke_share",
+    "month", "week_number",
+    "riding_season_share"  # solo cluster
+]</code></pre>
+                    <p class="text-xs text-slate-400 mt-2">Split <strong>cronologico</strong> (train: passato, test: futuro) per evitare leakage temporale.</p>
+                </div>
+            </section>
+
+            <!-- 6. RISULTATI GENERALI -->
+            <section id="risultati-generali" class="slide-in"><h2 class="text-xl sm:text-2xl font-bold mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-lg flex items-center justify-center text-sm font-bold shrink-0">6</span> Risultati — forecast generale</h2>
+                <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-5">
+                    <table class="w-full text-sm">
+                        <thead><tr class="border-b border-slate-300 dark:border-slate-600"><th class="text-left py-2">Modello</th><th class="text-right py-2">MAE</th><th class="text-right py-2">RMSE</th><th class="text-right py-2">MAPE</th><th class="text-right py-2">R²</th></tr></thead>
+                        <tbody>
+                            <tr class="border-b border-slate-200 dark:border-slate-700"><td class="py-2"><strong>Random Forest</strong> 🏆</td><td class="text-right py-2">1402.22</td><td class="text-right py-2">1762.12</td><td class="text-right py-2">22.00%</td><td class="text-right py-2">0.226</td></tr>
+                            <tr class="border-b border-slate-200 dark:border-slate-700"><td class="py-2">Holt-Winters</td><td class="text-right py-2">1713.03</td><td class="text-right py-2">2123.34</td><td class="text-right py-2">31.83%</td><td class="text-right py-2">-0.124</td></tr>
+                            <tr class="border-b border-slate-200 dark:border-slate-700"><td class="py-2">Seasonal Naive</td><td class="text-right py-2">2311.07</td><td class="text-right py-2">2725.96</td><td class="text-right py-2">39.74%</td><td class="text-right py-2">-0.853</td></tr>
+                            <tr><td class="py-2">MLP</td><td class="text-right py-2">3306.16</td><td class="text-right py-2">4569.68</td><td class="text-right py-2">53.80%</td><td class="text-right py-2">-4.206</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="bg-white dark:bg-slate-900 rounded-lg p-3 mt-3 border border-slate-200 dark:border-slate-700 text-sm">
+                        <p class="font-semibold mb-1">💡 Perché il forecast generale è solo benchmark?</p>
+                        <p>Perché il mix degli annunci cambia nel tempo. Se in un mese aumentano le moto più economiche, la mediana scende anche senza che i prezzi siano calati. I cluster età/km isolano questo effetto.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 7. RISULTATI CLUSTER -->
+            <section id="risultati-cluster" class="slide-in"><h2 class="text-xl sm:text-2xl font-bold mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-lg flex items-center justify-center text-sm font-bold shrink-0">7</span> Risultati — cluster forecasting</h2>
+                <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-5">
+                    <p class="text-sm mb-3 text-slate-500 dark:text-slate-400">Cluster eleggibili (≥20 mesi osservati):</p>
+                    <table class="w-full text-sm">
+                        <thead><tr class="border-b border-slate-300 dark:border-slate-600"><th class="text-left py-2">Cluster</th><th class="text-left py-2">Best model</th><th class="text-right py-2">MAE</th><th class="text-right py-2">RMSE</th><th class="text-right py-2">MAPE</th></tr></thead>
+                        <tbody>
+                            <tr class="border-b border-slate-200 dark:border-slate-700 bg-green-50 dark:bg-green-900/20"><td class="py-2 font-medium">11-20 anni / 0-5k km</td><td class="py-2">Holt-Winters</td><td class="text-right py-2">71.54</td><td class="text-right py-2">80.02</td><td class="text-right py-2">1.78%</td></tr>
+                            <tr class="border-b border-slate-200 dark:border-slate-700"><td class="py-2 font-medium">3-5 anni / 0-5k km</td><td class="py-2">Holt-Winters</td><td class="text-right py-2">700.82</td><td class="text-right py-2">864.97</td><td class="text-right py-2">9.11%</td></tr>
+                            <tr class="bg-amber-50 dark:bg-amber-900/20"><td class="py-2 font-medium">6-10 anni / 0-5k km</td><td class="py-2">Random Forest</td><td class="text-right py-2">562.05</td><td class="text-right py-2">718.39</td><td class="text-right py-2">10.38%</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="mt-3 grid sm:grid-cols-3 gap-3 text-sm">
+                        <div class="bg-white dark:bg-slate-900 rounded-lg p-3 border border-slate-200 dark:border-slate-700">
+                            <p class="font-semibold text-green-600">11-20 / 0-5k</p>
+                            <p class="text-xs">Cluster molto stabile, Holt-Winters cattura bene trend e stagionalità. MAPE 1.78%.</p>
+                        </div>
+                        <div class="bg-white dark:bg-slate-900 rounded-lg p-3 border border-slate-200 dark:border-slate-700">
+                            <p class="font-semibold">3-5 / 0-5k</p>
+                            <p class="text-xs">Moto relativamente recenti, prezzo più alto e volatile. Holt-Winters vince ma con MAPE 9%.</p>
+                        </div>
+                        <div class="bg-white dark:bg-slate-900 rounded-lg p-3 border border-slate-200 dark:border-slate-700">
+                            <p class="font-semibold text-amber-600">6-10 / 0-5k</p>
+                            <p class="text-xs">Il più interessante per acquisto. RF sfrutta riding_season_share. MAPE 10.38%.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 8. RACCOMANDAZIONE FINALE -->
+            <section id="raccomandazione" class="slide-in"><h2 class="text-xl sm:text-2xl font-bold mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-lg flex items-center justify-center text-sm font-bold shrink-0">8</span> Raccomandazione finale</h2>
+                <div class="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-slate-800 dark:to-slate-900 rounded-xl p-5 border border-green-200 dark:border-green-800">
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-sm text-slate-500">Periodo</p>
+                            <p class="text-xl font-bold">Agosto 2026</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-slate-500">Cluster</p>
+                            <p class="text-xl font-bold">6-10 anni / 0-5k km</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-slate-500">Prezzo previsto</p>
+                            <p class="text-xl font-bold">~5.789 €</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-slate-500">Mediana storica</p>
+                            <p class="text-xl font-bold">6.000 €</p>
+                        </div>
+                        <div class="sm:col-span-2">
+                            <p class="text-sm text-slate-500">Buy score</p>
+                            <p class="text-2xl font-bold text-green-600 dark:text-green-400">211 € (3.5%) → <span class="bg-green-100 dark:bg-green-900/40 px-3 py-1 rounded-full text-base">good_buy</span></p>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-slate-900 rounded-lg p-3 mt-3 border border-slate-200 dark:border-slate-700 text-sm">
+                        <p class="font-semibold mb-1">📌 Cosa significa?</p>
+                        <p>Il modello prevede che il prezzo mediano per le enduro 6-10 anni con 0-5k km sarà sotto la media storica del cluster. Non è una certezza, ma un <strong>segnale operativo</strong>: se stai cercando quel tipo di moto, l'estate 2026 potrebbe essere un buon momento.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 9. SCRIPT PER SCRIPT -->
+            <section id="script" class="slide-in"><h2 class="text-xl sm:text-2xl font-bold mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-lg flex items-center justify-center text-sm font-bold shrink-0">9</span> Script per script — cosa fa ciascuno</h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Ogni script è uno step operativo della pipeline. Clicca per i dettagli.</p>
+
+                <div class="space-y-3">
+
+                <!-- run_final_pipeline -->
+                <details class="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 cursor-pointer group">
+                    <summary class="font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
+                        <code class="text-sm bg-blue-100 dark:bg-blue-900/40 px-2 py-0.5 rounded">run_final_pipeline.py</code>
+                        <span class="text-xs text-slate-400 font-normal">— Entrypoint unico</span>
+                    </summary>
+                    <div class="mt-3 space-y-2 text-sm">
+                        <p><strong>Cosa fa:</strong> esegue tutta la pipeline in ordine. Chiama gli script da 01 a 07. Se uno fallisce, la pipeline si ferma.</p>
+                        <div class="bg-white dark:bg-slate-900 rounded-lg p-2 border border-slate-200 dark:border-slate-700 text-xs"><code>PIPELINE_STEPS = ["scripts/01_preprocess.py", "scripts/02_train_forecasting_models.py", ...]</code></div>
+                        <p><strong>Da sapere:</strong> è il punto di ingresso principale. Il professore lancia direttamente <code>python scripts/run_final_pipeline.py</code> e tutto gira.</p>
+                        <blockquote class="italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-400 pl-3 text-xs">"Ho creato un entrypoint unico per rendere il progetto riproducibile: lanciando questo script si rigenerano preprocessing, modelli, metriche, raccomandazioni e grafici."</blockquote>
+                    </div>
+                </details>
+
+                <!-- 01 -->
+                <details class="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 cursor-pointer group">
+                    <summary class="font-bold flex items-center gap-2">
+                        <code class="text-sm bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded">01_preprocess.py</code>
+                        <span class="text-xs text-slate-400 font-normal">— Pulizia + serie temporali</span>
+                    </summary>
+                    <div class="mt-3 space-y-2 text-sm">
+                        <p><strong>Cosa fa:</strong> trasforma il dataset raw (1930 annunci) in dataset puliti (1891) e serie temporali (settimanale e mensile). Crea feature derivate come età, km_per_year, price_per_cc, is_vintage, is_youngtimer, market_segment, stagionalità.</p>
+                        <p><strong>Moduli src usati:</strong> <code>src.config</code> (path), <code>src.preprocessing</code> (load_raw_listings, clean_listings, build_weekly_market_series, build_monthly_market_series, add_seasonal_features, build_seasonal_market_summary), <code>src.plots</code>.</p>
+                        <p><strong>Output:</strong></p>
+                        <ul class="list-disc list-inside text-xs text-slate-500">
+                            <li><code>data/processed/enduro_listings_clean.csv</code> — 1891 annunci puliti</li>
+                            <li><code>data/processed/weekly_market_series.csv</code> — 262 settimane</li>
+                            <li><code>data/processed/monthly_market_series.csv</code> — 72 mesi</li>
+                            <li><code>outputs/figures/01..04</code> — distribuzione prezzi, prezzo vs età, serie settimanale/mensile</li>
+                            <li><code>outputs/tables/seasonal_market_summary.csv</code> — summary stagionale</li>
+                            <li><code>outputs/figures/14_seasonal_market_summary.png</code> — grafico stagionale</li>
+                        </ul>
+                        <p><strong>Da sapere:</strong> la pipeline non lavora sul singolo annuncio ma su aggregazioni temporali. <code>median_price</code> è il target. Il dataset raw resta immutato.</p>
+                        <blockquote class="italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-400 pl-3 text-xs">"Il primo script trasforma annunci rumorosi in una base analitica pulita e aggregabile. La scelta centrale è la mediana mensile come misura robusta."</blockquote>
+                    </div>
+                </details>
+
+                <!-- 02 -->
+                <details class="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 cursor-pointer group">
+                    <summary class="font-bold flex items-center gap-2">
+                        <code class="text-sm bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded">02_train_forecasting_models.py</code>
+                        <span class="text-xs text-slate-400 font-normal">— Forecast generale mercato</span>
+                    </summary>
+                    <div class="mt-3 space-y-2 text-sm">
+                        <p><strong>Cosa fa:</strong> carica la serie mensile, costruisce feature supervisionate (lag, rolling, variabili esplicative), divide train/test in ordine cronologico, addestra e confronta 4 modelli, salva metriche, predizioni e grafici.</p>
+                        <p><strong>Moduli src usati:</strong> <code>src.features</code> (make_lagged_features, chronological_split), <code>src.models</code> (seasonal_naive_forecast, holt_winters_forecast, train_random_forest, train_mlp), <code>src.metrics</code>, <code>src.plots</code>.</p>
+                        <p><strong>Output:</strong> <code>outputs/tables/metrics.csv</code>, <code>predictions.csv</code>, <code>model_comparison_tests.csv</code>, <code>outputs/figures/05_06</code>.</p>
+                        <p><strong>Da sapere:</strong> lo split cronologico evita leakage. RF è migliore sul generale (MAE 1402, MAPE 22%). Il forecast generale è benchmark, non risultato finale.</p>
+                        <blockquote class="italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-400 pl-3 text-xs">"Il forecast generale serve come benchmark. Random Forest ottiene i migliori risultati perché usa sia i valori passati sia variabili che descrivono la composizione del mercato."</blockquote>
+                    </div>
+                </details>
+
+                <!-- 03 -->
+                <details class="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 cursor-pointer group">
+                    <summary class="font-bold flex items-center gap-2">
+                        <code class="text-sm bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded">03_buying_period_recommendation.py</code>
+                        <span class="text-xs text-slate-400 font-normal">— Prima raccomandazione acquisto</span>
+                    </summary>
+                    <div class="mt-3 space-y-2 text-sm">
+                        <p><strong>Cosa fa:</strong> legge predictions e metrics, sceglie il miglior modello per RMSE, confronta le previsioni con la mediana storica, calcola il risparmio atteso.</p>
+                        <p><strong>Formula:</strong> <code>expected_saving = historical_reference - predicted_price</code></p>
+                        <p><strong>Output:</strong> <code>outputs/tables/buying_period_recommendations.csv</code></p>
+                        <p><strong>Da sapere:</strong> è una raccomandazione generale meno robusta di quella per cluster. Mostra il passaggio da predictive a prescriptive analytics.</p>
+                        <blockquote class="italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-400 pl-3 text-xs">"Prende il miglior forecast generale e lo trasforma in una prima indicazione operativa: se il prezzo previsto è sotto la mediana storica, quel periodo può essere interessante."</blockquote>
+                    </div>
+                </details>
+
+                <!-- 04 -->
+                <details class="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 cursor-pointer group">
+                    <summary class="font-bold flex items-center gap-2">
+                        <code class="text-sm bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded">04_median_selection_analysis.py</code>
+                        <span class="text-xs text-slate-400 font-normal">— Selezione segmento core</span>
+                    </summary>
+                    <div class="mt-3 space-y-2 text-sm">
+                        <p><strong>Cosa fa:</strong> carica il dataset pulito, costruisce segmenti di mercato, confronta mercato completo vs core vs maxi enduro vs vintage, calcola mediane mensili per segmento, salva il dataset mensile del segmento core.</p>
+                        <p><strong>Filtro core:</strong> <code>market_segment = modern, 250 <= engine_cc <= 500, 1000 <= price <= 20000</code></p>
+                        <p><strong>Moduli src usati:</strong> <code>src.config</code>, <code>src.segments</code> (filter_core_market)</p>
+                        <p><strong>Output:</strong> <code>selected_monthly_medians.csv</code>, <code>selected_market_summary.csv</code>, <code>data/processed/core_modern_enduro_monthly_series.csv</code>, <code>outputs/figures/07</code></p>
+                        <p><strong>Da sapere:</strong> il mercato completo è troppo eterogeneo. Vintage, youngtimer e maxi enduro hanno dinamiche diverse.</p>
+                        <blockquote class="italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-400 pl-3 text-xs">"Prima di fare raccomandazioni operative ho isolato il sotto-mercato più omogeneo: enduro moderne 250-500cc. Questo evita di mescolare moto con dinamiche di prezzo molto diverse."</blockquote>
+                    </div>
+                </details>
+
+                <!-- 05 -->
+                <details class="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 cursor-pointer group">
+                    <summary class="font-bold flex items-center gap-2">
+                        <code class="text-sm bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded">05_age_km_market_insights.py</code>
+                        <span class="text-xs text-slate-400 font-normal">— Cluster età/km descrittivo</span>
+                    </summary>
+                    <div class="mt-3 space-y-2 text-sm">
+                        <p><strong>Cosa fa:</strong> prende il segmento core, assegna fasce di età (0-2, 3-5, 6-10, 11-20, 20+) e km (0-5k, 5-10k, 10-15k, 15k+), calcola mediane e conteggi per cluster, costruisce heatmap, boxplot, genera consigli descrittivi e serie mensili per cluster.</p>
+                        <p><strong>Moduli src usati:</strong> <code>src.segments</code> (add_age_km_bands, add_cluster_id), <code>src.cluster_analysis</code> (build_cluster_summary, build_price_matrix, build_count_matrix, build_monthly_cluster_series, build_buying_advice), <code>src.config</code></p>
+                        <p><strong>Output:</strong> 4 tabelle CSV + 3 figure + serie cluster mensile</p>
+                        <p><strong>Da sapere:</strong> l'età è molto informativa, il chilometraggio migliora il dettaglio ma è più rumoroso. Questa è ancora descriptive analytics.</p>
+                        <blockquote class="italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-400 pl-3 text-xs">"Qui passo da un segmento generale a gruppi più omogenei. Le fasce età/km rendono il risultato più interpretabile perché confrontano moto simili."</blockquote>
+                    </div>
+                </details>
+
+                <!-- 06 -->
+                <details class="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 cursor-pointer group">
+                    <summary class="font-bold flex items-center gap-2">
+                        <code class="text-sm bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded">06_cluster_forecasting.py</code>
+                        <span class="text-xs text-slate-400 font-normal">— Forecast per cluster</span>
+                    </summary>
+                    <div class="mt-3 space-y-2 text-sm">
+                        <p><strong>Cosa fa:</strong> legge le serie mensili per cluster, seleziona solo cluster con almeno 20 mesi osservati, valuta i modelli (SN, HW, RF) per ogni cluster eleggibile, salva metriche, predizioni e buying score corrente.</p>
+                        <p><strong>Formula buy_score:</strong> <code>buy_score = historical_cluster_median - latest_median_price</code></p>
+                        <p><strong>Moduli src usati:</strong> <code>src.cluster_forecasting</code> (eligible_clusters, prepare_model_series, evaluate_cluster_models, build_cluster_buying_scores), <code>src.config</code></p>
+                        <p><strong>Output:</strong> <code>cluster_forecast_metrics.csv</code>, <code>cluster_buying_scores.csv</code>, <code>outputs/figures/11_12</code></p>
+                        <p><strong>Da sapere:</strong> non tutti i cluster sono previsibili. Si usano solo cluster con sufficiente copertura temporale. Il forecast per cluster è più interpretabile del forecast generale.</p>
+                        <blockquote class="italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-400 pl-3 text-xs">"La soglia minima sui mesi serve a non fare forecast su serie troppo corte. Preferisco avere meno cluster ma più affidabili."</blockquote>
+                    </div>
+                </details>
+
+                <!-- 07 -->
+                <details class="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 cursor-pointer group">
+                    <summary class="font-bold flex items-center gap-2">
+                        <code class="text-sm bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded">07_future_buy_forecast.py</code>
+                        <span class="text-xs text-slate-400 font-normal">— Raccomandazione finale</span>
+                    </summary>
+                    <div class="mt-3 space-y-2 text-sm">
+                        <p><strong>Cosa fa:</strong> prende i cluster eleggibili, sceglie il miglior modello per cluster, prevede da giugno a dicembre 2026, calcola buy_score e assegna raccomandazione finale.</p>
+                        <p><strong>Label:</strong></p>
+                        <ul class="list-disc list-inside text-xs text-slate-500">
+                            <li>score% &gt;= 10% → <span class="text-green-600 font-medium">strong_buy</span></li>
+                            <li>score% &gt;= 3% → <span class="text-blue-600 font-medium">good_buy</span></li>
+                            <li>score% &lt;= -10% → <span class="text-red-600 font-medium">avoid_expensive</span></li>
+                            <li>altrimenti → <span class="text-slate-500">neutral</span></li>
+                        </ul>
+                        <p><strong>Risultato:</strong> Agosto 2026, cluster 6-10/0-5k, buy_score 211€ (3.5%), <strong>good_buy</strong></p>
+                        <p><strong>Moduli src usati:</strong> <code>src.cluster_forecasting</code> (best_model_for_cluster, build_future_row, build_future_buy_recommendations), <code>src.config</code></p>
+                        <p><strong>Output:</strong> <code>future_cluster_buy_recommendations.csv</code>, <code>future_cluster_model_selection.csv</code>, <code>outputs/figures/13</code></p>
+                        <p><strong>Da sapere:</strong> questa è la parte prescriptive. Non dice "compra sicuramente", ma "quel cluster è previsto sotto la sua mediana storica".</p>
+                        <blockquote class="italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-400 pl-3 text-xs">"La raccomandazione finale non è una previsione assoluta del mercato, ma un confronto relativo: se il prezzo previsto è sotto la mediana storica dello stesso cluster, quel periodo è potenzialmente conveniente."</blockquote>
+                    </div>
+                </details>
+
+                </div>
+
+                <!-- architettura riassuntiva -->
+                <div class="mt-4 bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-200 dark:border-slate-700 text-sm">
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <div>
+                            <h3 class="font-bold mb-2 text-blue-600 dark:text-blue-400">Script → Orchestrazione</h3>
+                            <ul class="space-y-1 text-xs text-slate-600 dark:text-slate-300">
+                                <li><code>01</code> — pulizia + serie temporali</li>
+                                <li><code>02</code> — forecast generale mercato</li>
+                                <li><code>03</code> — prima raccomandazione acquisto</li>
+                                <li><code>04</code> — filtra segmento core 250-500cc</li>
+                                <li><code>05</code> — analisi descrittiva cluster età/km</li>
+                                <li><code>06</code> — forecast e score per cluster</li>
+                                <li><code>07</code> — prescrizione finale buy_score</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="font-bold mb-2 text-green-600 dark:text-green-400">Src → Logica modulare</h3>
+                            <ul class="space-y-1 text-xs text-slate-600 dark:text-slate-300">
+                                <li><code>config.py</code> — percorsi, costanti, soglie</li>
+                                <li><code>preprocessing.py</code> — load, clean, feature, agg</li>
+                                <li><code>features.py</code> — lag, rolling, split cronologico</li>
+                                <li><code>models.py</code> — SN, HW, RF, MLP</li>
+                                <li><code>metrics.py</code> — MAE, RMSE, MAPE, R2, sign test</li>
+                                <li><code>segments.py</code> — filtro core, fasce età/km</li>
+                                <li><code>cluster_analysis.py</code> — matrici, serie cluster</li>
+                                <li><code>cluster_forecasting.py</code> — eval, score, forecast</li>
+                                <li><code>plots.py</code> — tutti i grafici</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p class="mt-3 text-xs text-slate-400">Principio: gli script orchestrano, <code>src/</code> implementa la logica. Separazione netta. Entrypoint: <code>run_final_pipeline.py</code>.</p>
+                </div>
+            </section>
+
+            <!-- 10. METRICHE -->
+            <section id="metriche" class="slide-in"><h2 class="text-xl sm:text-2xl font-bold mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-lg flex items-center justify-center text-sm font-bold shrink-0">10</span> Metriche di valutazione</h2>
+                <div class="grid sm:grid-cols-2 gap-3">
+                    <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-5">
+                        <h3 class="font-bold">MAE</h3>
+                        <p class="text-sm text-slate-500">Mean Absolute Error</p>
+                        <p class="text-xs mt-1">Errore medio assoluto in euro. Interpretabile direttamente: "in media sbagliamo di X €".</p>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-5">
+                        <h3 class="font-bold">RMSE</h3>
+                        <p class="text-sm text-slate-500">Root Mean Squared Error</p>
+                        <p class="text-xs mt-1">Penalizza errori grandi (eleva al quadrato). Utile se vogliamo evitare previsioni molto sbagliate.</p>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-5">
+                        <h3 class="font-bold">MAPE</h3>
+                        <p class="text-sm text-slate-500">Mean Absolute Percentage Error</p>
+                        <p class="text-xs mt-1">Errore percentuale. Utile per confrontare cluster con prezzi molto diversi.</p>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-5">
+                        <h3 class="font-bold">R²</h3>
+                        <p class="text-sm text-slate-500">Coefficiente di determinazione</p>
+                        <p class="text-xs mt-1">Quota di variabilità spiegata dal modello. Può essere negativo (modello peggio della media).</p>
+                    </div>
+                </div>
+                <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-5 mt-3">
+                    <h3 class="font-bold mb-2">Sign test pairwise</h3>
+                    <p class="text-sm">Confronta i modelli mese per mese: conta quante volte il modello A ha errore assoluto minore di B. Il <strong>p-value</strong> dice se la differenza è statisticamente significativa.</p>
+                    <pre class="bg-white dark:bg-slate-900 rounded p-3 text-xs mt-2 overflow-x-auto"><code>    model_a       model_b        wins_a  wins_b  p-value
+holtwinters  randomforest        7       7       1.000   # nessun vincitore chiaro
+seasonal_naive  randomforest     3       11      0.057   # RF meglio, non significativo</code></pre>
+                </div>
+            </section>
+
+            <!-- 11. SEASONALITY -->
+            <section id="seasonalita" class="slide-in"><h2 class="text-xl sm:text-2xl font-bold mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-lg flex items-center justify-center text-sm font-bold shrink-0">11</span> Stagionalità</h2>
+                <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-5 space-y-3">
+                    <p>Abbiamo introdotto due livelli di stagionalità:</p>
+                    <div class="grid sm:grid-cols-2 gap-3 text-sm">
+                        <div class="bg-white dark:bg-slate-900 rounded-lg p-3 border border-slate-200 dark:border-slate-700">
+                            <p class="font-semibold">📊 Descrittiva</p>
+                            <p class="text-xs mt-1">Feature <code>season</code> (inverno/primavera/estate/autunno) e <code>riding_season</code> (apr–ott) create in preprocessing. Tabella e grafico in <code>outputs/</code>. Serve per interpretazione di dominio.</p>
+                        </div>
+                        <div class="bg-white dark:bg-slate-900 rounded-lg p-3 border border-slate-200 dark:border-slate-700">
+                            <p class="font-semibold">🤖 Modellistica</p>
+                            <p class="text-xs mt-1"><code>riding_season_share</code> usata come feature nei modelli di cluster forecasting. Non migliora il forecast generale (troppo rumore), ma aiuta RF sul cluster 6-10/0-5k.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 12. STRUTTURA FILE -->
+            <section id="struttura" class="slide-in"><h2 class="text-xl sm:text-2xl font-bold mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-lg flex items-center justify-center text-sm font-bold shrink-0">12</span> Struttura del repository</h2>
+                <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-5">
+                    <pre class="text-xs sm:text-sm overflow-x-auto"><code>enduro-market-analytics/
+├── data/raw/enduro_listings_raw.csv        # unico dataset raw
+├── data/processed/                         # rigenerato dalla pipeline
+├── src/                                    # logica modulare
+│   ├── config.py, preprocessing.py, features.py
+│   ├── models.py, metrics.py, segments.py
+│   ├── cluster_analysis.py, cluster_forecasting.py
+│   └── plots.py
+├── scripts/                                # orchestrazione
+│   ├── run_final_pipeline.py              # entrypoint unico
+│   └── 01_preprocess.py ... 07_*.py
+├── outputs/                                # risultati finali
+│   ├── figures/    (14 grafici PNG)
+│   └── tables/     (CSV e markdown)
+├── docs/                                   # documentazione
+├── requirements.txt
+└── README.md</code></pre>
+                </div>
+            </section>
+
+            <!-- 13. OUTPUTS -->
+            <section id="outputs" class="slide-in"><h2 class="text-xl sm:text-2xl font-bold mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-lg flex items-center justify-center text-sm font-bold shrink-0">13</span> Outputs prodotti</h2>
+                <div class="grid sm:grid-cols-2 gap-3 text-sm">
+                    <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-5">
+                        <h3 class="font-bold mb-2">📈 Figure (14)</h3>
+                        <ul class="space-y-1 text-slate-600 dark:text-slate-300 text-xs">
+                            <li><code>01_price_distribution</code> — distribuzione prezzi</li>
+                            <li><code>02_price_vs_age</code> — prezzo vs età</li>
+                            <li><code>03_weekly_median_price</code> — serie settimanale</li>
+                            <li><code>04_monthly_median_price</code> — serie mensile</li>
+                            <li><code>05_forecast_comparison</code> — confronto forecast</li>
+                            <li><code>06_model_rmse_comparison</code> — RMSE a confronto</li>
+                            <li><code>07_selected_core_monthly_median</code> — core market</li>
+                            <li><code>08_age_km_price_heatmap</code> — heatmap prezzi</li>
+                            <li><code>09_price_by_age_band</code> — prezzo per fascia età</li>
+                            <li><code>10_price_by_km_band</code> — prezzo per fascia km</li>
+                            <li><code>11_cluster_forecast_rmse</code> — RMSE cluster</li>
+                            <li><code>12_cluster_buy_score</code> — buy score corrente</li>
+                            <li><code>13_future_cluster_buy_windows</code> — finestre future</li>
+                            <li><code>14_seasonal_market_summary</code> — summary stagionale</li>
+                        </ul>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-5">
+                        <h3 class="font-bold mb-2">📊 Tabelle</h3>
+                        <ul class="space-y-1 text-slate-600 dark:text-slate-300 text-xs">
+                            <li><code>metrics.csv</code> — metriche modelli generali</li>
+                            <li><code>predictions.csv</code> — predizioni mensili</li>
+                            <li><code>model_comparison_tests.csv</code> — sign test</li>
+                            <li><code>buying_period_recommendations.csv</code> — prima racc.</li>
+                            <li><code>selected_monthly_medians.csv</code> — mediane core</li>
+                            <li><code>age_km_cluster_summary.csv</code> — summary cluster</li>
+                            <li><code>age_km_price_matrix.csv</code> — matrice prezzi</li>
+                            <li><code>age_km_monthly_cluster_series.csv</code> — serie cluster</li>
+                            <li><code>cluster_forecast_metrics.csv</code> — metriche cluster</li>
+                            <li><code>cluster_buying_scores.csv</code> — score correnti</li>
+                            <li><code>future_cluster_buy_recommendations.csv</code> — finestre future</li>
+                            <li><code>seasonal_market_summary.csv</code> — summary stagionale</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 14. LIMITI -->
+            <section id="limiti" class="slide-in"><h2 class="text-xl sm:text-2xl font-bold mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-lg flex items-center justify-center text-sm font-bold shrink-0">14</span> Limiti del progetto</h2>
+                <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-5">
+                    <ul class="space-y-2 text-sm">
+                        <li><strong>Prezzi richiesti, non reali</strong> — gli annunci mostrano il prezzo chiesto, non quello di vendita. Potrebbero esserci sconti non osservati.</li>
+                        <li><strong>Dataset limitato</strong> — 1891 annunci in 4 anni. Cluster con pochi dati esclusi dal forecasting.</li>
+                        <li><strong>Variabili non osservate</strong> — manutenzione, stato reale, accessori, urgenza venditore non sono nel dataset.</li>
+                        <li><strong>Stagionalità debole</strong> — solo riding_season_share ha dato un contributo misurabile. Forse serve una serie più lunga per catturare stagionalità più fine.</li>
+                        <li><strong>No validazione out-of-sample avanzata</strong> — split train/test fisso, non cross-validation temporale (per limitatezza serie).</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- FLASHCARDS -->
+            <section id="flashcards" class="slide-in"><h2 class="text-xl sm:text-2xl font-bold mb-4">🎴 Flashcard interattive</h2>
+                <p class="text-slate-500 dark:text-slate-400 mb-4 text-sm">Clicca per girare. Usa le frecce ← → per navigare.</p>
+                <div id="flashcards-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+            </section>
+
+            <!-- QUIZ -->
+            <section id="quiz" class="slide-in"><h2 class="text-xl sm:text-2xl font-bold mb-4">📝 Quiz di verifica</h2>
+                <p class="text-slate-500 dark:text-slate-400 mb-4 text-sm">Testa la tua preparazione.</p>
+                <div id="quiz-container" class="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-5"></div>
+            </section>
+
+            <!-- DOMANDE PROBABILI -->
+            <section id="domande" class="slide-in"><h2 class="text-xl sm:text-2xl font-bold mb-4">❓ Domande probabili del professore</h2>
+                <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-5">
+                    <div class="space-y-3 text-sm">
+                        <details class="bg-white dark:bg-slate-900 rounded-lg p-3 border border-slate-200 dark:border-slate-700 cursor-pointer">
+                            <summary class="font-semibold">Qual è l'obiettivo del progetto?</summary>
+                            <p class="mt-2 text-slate-600 dark:text-slate-300">Supportare decisioni di acquisto nel mercato delle enduro usate, identificando quando e quale tipo di moto conviene comprare, tramite forecast del prezzo mediano e prescrizione basata su buy_score.</p>
+                        </details>
+                        <details class="bg-white dark:bg-slate-900 rounded-lg p-3 border border-slate-200 dark:border-slate-700 cursor-pointer">
+                            <summary class="font-semibold">Qual è il target e perché?</summary>
+                            <p class="mt-2 text-slate-600 dark:text-slate-300">Il prezzo mediano mensile. Non il prezzo del singolo annuncio, perché troppo rumoroso. La mediana è robusta agli outlier.</p>
+                        </details>
+                        <details class="bg-white dark:bg-slate-900 rounded-lg p-3 border border-slate-200 dark:border-slate-700 cursor-pointer">
+                            <summary class="font-semibold">Quale modello è migliore e perché?</summary>
+                            <p class="mt-2 text-slate-600 dark:text-slate-300">Sul forecast generale vince Random Forest (MAE 1402, MAPE 22%) perché usa sia i lag temporali sia variabili esplicative che descrivono la composizione del mercato. Sui cluster, Holt-Winters è migliore per cluster stabili (11-20/0-5k), Random Forest per cluster più variabili (6-10/0-5k).</p>
+                        </details>
+                        <details class="bg-white dark:bg-slate-900 rounded-lg p-3 border border-slate-200 dark:border-slate-700 cursor-pointer">
+                            <summary class="font-semibold">Perché non basta il forecast generale?</summary>
+                            <p class="mt-2 text-slate-600 dark:text-slate-300">Perché il mix di annunci cambia nel tempo. Se aumentano le moto economiche in un mese, la mediana scende anche se i prezzi delle singole moto non sono cambiati. I cluster età/km isolano questo effetto.</p>
+                        </details>
+                        <details class="bg-white dark:bg-slate-900 rounded-lg p-3 border border-slate-200 dark:border-slate-700 cursor-pointer">
+                            <summary class="font-semibold">Come avete evitato il leakage temporale?</summary>
+                            <p class="mt-2 text-slate-600 dark:text-slate-300">Split cronologico: il train set contiene solo periodi passati, il test set solo periodi futuri. Mai mischiare. Le feature lagged usano solo valori precedenti al periodo da prevedere.</p>
+                        </details>
+                        <details class="bg-white dark:bg-slate-900 rounded-lg p-3 border border-slate-200 dark:border-slate-700 cursor-pointer">
+                            <summary class="font-semibold">Qual è il risultato operativo finale?</summary>
+                            <p class="mt-2 text-slate-600 dark:text-slate-300">Agosto 2026, cluster 6-10 anni / 0-5k km, buy_score 211€, good_buy. Il modello prevede un prezzo sotto la mediana storica del cluster.</p>
+                        </details>
+                        <details class="bg-white dark:bg-slate-900 rounded-lg p-3 border border-slate-200 dark:border-slate-700 cursor-pointer">
+                            <summary class="font-semibold">Che limiti ha il progetto?</summary>
+                            <p class="mt-2 text-slate-600 dark:text-slate-300">Prezzi richiesti non reali, dataset limitato (1891 annunci), variabili non osservate (manutenzione, stato), stagionalità poco catturabile con 4 anni di dati.</p>
+                        </details>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SHORTCUT -->
+            <div class="text-center text-xs text-slate-400 pt-4 border-t border-slate-200 dark:border-slate-700">
+                <p><kbd class="px-1.5 py-0.5 bg-slate-200 dark:bg-slate-700 rounded text-xs">T</kbd> Toggle tema · <kbd class="px-1.5 py-0.5 bg-slate-200 dark:bg-slate-700 rounded text-xs">←</kbd><kbd class="px-1.5 py-0.5 bg-slate-200 dark:bg-slate-700 rounded text-xs">→</kbd> Naviga flashcard</p>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // ========== FLASHCARD DATA ==========
+        const flashcardData = [
+            {level:"Base", q:"Cos'è il dataset raw finale?", a:"data/raw/enduro_listings_raw.csv — 1930 annunci, 1891 dopo pulizia."},
+            {level:"Base", q:"Qual è il target principale?", a:"median_price — prezzo mediano mensile aggregato."},
+            {level:"Base", q:"Comando per eseguire tutta la pipeline?", a:"python scripts/run_final_pipeline.py"},
+            {level:"Base", q:"Quanti script compongono la pipeline?", a:"7 script (01–07) orchestrati da run_final_pipeline.py."},
+            {level:"Base", q:"Quanti moduli src/ ci sono?", a:"9 moduli: config, preprocessing, features, models, metrics, segments, cluster_analysis, cluster_forecasting, plots."},
+            {level:"Base", q:"Quali sono i 3 livelli analytics del progetto?", a:"Descriptive (pulizia, segmenti, cluster) → Predictive (forecast) → Prescriptive (buy_score)."},
+            {level:"Intermedio", q:"Perché la mediana e non la media?", a:"Robustezza agli outlier. La media è distorta da annunci anomali, la mediana (breakdown 50%) rappresenta il prezzo tipico."},
+            {level:"Intermedio", q:"Perché frequenza mensile?", a:"Compromesso tra dettaglio e stabilità. Il dato settimanale è troppo sparso (poche osservazioni)."},
+            {level:"Intermedio", q:"Cosa fa lo split cronologico?", a:"Divide train/test in ordine temporale: train sul passato, test sul futuro. Evita leakage."},
+            {level:"Intermedio", q:"Cosa significa buy_score?", a:"Differenza tra mediana storica del cluster e prezzo previsto (o prezzo corrente). Positivo = conveniente."},
+            {level:"Intermedio", q:"Quali modelli sono confrontati?", a:"Seasonal Naive (baseline), Holt-Winters (statistico), Random Forest (ML), MLP (neural)."},
+            {level:"Intermedio", q:"Cosa misura il sign test?", a:"Confronta i modelli mese per mese: quante volte A batte B in errore assoluto. P-value dice se significativo."},
+            {level:"Intermedio", q:"Quale segmento è il core market?", a:"Enduro moderne 250-500cc, 1000-20000€. Esclude vintage, youngtimer e maxi enduro."},
+            {level:"Avanzato", q:"Perché il forecast generale è solo benchmark?", a:"Perché mescola moto diverse. Se il mix cambia, la mediana cambia senza che i prezzi siano cambiati. I cluster isolano questo effetto."},
+            {level:"Avanzato", q:"Perché i cluster età/km migliorano l'interpretabilità?", a:"Confrontano moto più simili (stessa fascia età/km). La raccomandazione diventa 'quando comprare quale tipo di moto'."},
+            {level:"Avanzato", q:"Perché non interpolazione nelle serie cluster?", a:"Per non introdurre informazione artificiale. Usiamo solo mesi con annunci reali. Cluster con &lt;20 mesi esclusi."},
+            {level:"Avanzato", q:"Qual è il risultato finale e perché proprio quel cluster?", a:"Agosto 2026, cluster 6-10/0-5k. RF prevede 5789€ vs mediana 6000€. Buy_score 211, good_buy. È il miglior rapporto tra confidenza del forecast e convenienza."},
+            {level:"Avanzato", q:"Cosa migliorerebbe il progetto?", a:"Prezzi reali di vendita (non richiesti), più anni di dati, variabili sulla qualità della moto, validazione out-of-sample rolling."},
+        ];
+
+        // ========== QUIZ DATA ==========
+        const quizQuestions = [
+            {
+                question: "Qual è il target principale del forecasting?",
+                options: ["Il prezzo medio settimanale", "Il prezzo mediano mensile", "Il prezzo del singolo annuncio", "Il numero di annunci"],
+                correct: 1,
+                explanation: "Il target è median_price, il prezzo mediano aggregato per mese."
+            },
+            {
+                question: "Perché si usa la mediana e non la media?",
+                options: ["Perché è più facile da calcolare", "Perché è robusta agli outlier", "Perché la media non esiste", "Perché il professore l'ha richiesto"],
+                correct: 1,
+                explanation: "La mediana ha breakdown point 50%, la media è distorta da outlier."
+            },
+            {
+                question: "Quale modello dà i migliori risultati sul forecast generale?",
+                options: ["Holt-Winters", "Seasonal Naive", "Random Forest", "MLP"],
+                correct: 2,
+                explanation: "Random Forest: MAE 1402, MAPE 22%. Usa lag + variabili esplicative."
+            },
+            {
+                question: "Cosa misura il buy_score?",
+                options: ["Il prezzo della moto", "La differenza tra mediana storica e prezzo previsto", "Il numero di chilometri", "L'età media del parco annunci"],
+                correct: 1,
+                explanation: "buy_score = historical_cluster_median - predicted_price. Positivo = conveniente."
+            },
+            {
+                question: "Quanti script compongono la pipeline?",
+                options: ["3", "5", "7", "10"],
+                correct: 2,
+                explanation: "7 script (01-07) più run_final_pipeline.py come entrypoint."
+            },
+            {
+                question: "Cosa sono i 3 livelli del progetto?",
+                options: ["Base, Intermedio, Avanzato", "Descriptive, Predictive, Prescriptive", "Train, Validation, Test", "Raw, Clean, Processed"],
+                correct: 1,
+                explanation: "Descriptive (pulizia, cluster) → Predictive (forecast) → Prescriptive (buy_score)."
+            },
+            {
+                question: "Qual è la raccomandazione finale?",
+                options: ["Maggio 2026, cluster 3-5/0-5k", "Agosto 2026, cluster 6-10/0-5k", "Settembre 2026, cluster 11-20/0-5k", "Sempre comprare a gennaio"],
+                correct: 1,
+                explanation: "Agosto 2026, cluster 6-10/0-5k, buy_score 211€, good_buy."
+            },
+            {
+                question: "Perché non si usa il prezzo del singolo annuncio?",
+                options: ["Perché non abbiamo quei dati", "Perché è troppo rumoroso (fattori non osservati)", "Perché la legge lo vieta", "Perché è più facile così"],
+                correct: 1,
+                explanation: "Il singolo prezzo dipende da manutenzione, stato, accessori, urgenza venditore — non osservati."
+            },
+            {
+                question: "Cosa fa lo split cronologico?",
+                options: ["Divide i dati casualmente", "Divide in ordine temporale", "Separa per marca di moto", "Usa solo i dati estivi"],
+                correct: 1,
+                explanation: "Train sul passato, test sul futuro. Evita leakage informativo."
+            },
+            {
+                question: "Quanti cluster eleggibili per il forecasting?",
+                options: ["1", "3", "5", "10"],
+                correct: 1,
+                explanation: "3 cluster con >=20 mesi osservati: 11-20/0-5k, 3-5/0-5k, 6-10/0-5k."
+            },
+        ];
+
+        // ========== INIT ==========
+        function initTheme() {
+            const t = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light');
+            if (t === 'dark') document.documentElement.classList.add('dark');
+        }
+        function toggleTheme() {
+            const d = document.documentElement;
+            d.classList.toggle('dark');
+            localStorage.setItem('theme', d.classList.contains('dark') ? 'dark' : 'light');
+            if (typeof mermaid !== 'undefined') {
+                mermaid.initialize({startOnLoad:false, theme: d.classList.contains('dark') ? 'dark' : 'default'});
+                document.querySelectorAll('.mermaid').forEach(el => {
+                    const code = el.getAttribute('data-mermaid');
+                    if (code) { el.innerHTML = code; mermaid.init(undefined, el); }
+                });
+            }
+        }
+
+        // Flashcards
+        function renderFlashcards() {
+            const container = document.getElementById('flashcards-container');
+            flashcardData.forEach((f, i) => {
+                const colors = {Base:'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300', Intermedio:'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300', Avanzato:'bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300'};
+                const card = document.createElement('div');
+                card.className = 'flashcard-3d';
+                card.setAttribute('tabindex', '0');
+                card.setAttribute('role', 'button');
+                card.innerHTML = `<div class="inner relative w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900" style="min-height:130px">
+                    <div class="front p-4 flex flex-col justify-center items-center text-center">
+                        <span class="text-xs px-2 py-0.5 rounded-full mb-2 ${colors[f.level]}">${f.level}</span>
+                        <p class="font-medium text-sm">${f.q}</p>
+                        <p class="text-xs text-slate-400 mt-2">👆 Clicca per rispondere</p>
+                    </div>
+                    <div class="back p-4 flex flex-col justify-center items-center text-center">
+                        <span class="text-xs px-2 py-0.5 rounded-full mb-2 ${colors[f.level]}">${f.level}</span>
+                        <p class="text-sm">${f.a}</p>
+                    </div>
+                </div>`;
+                card.addEventListener('click', () => card.classList.toggle('flipped'));
+                card.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.classList.toggle('flipped'); } });
+                container.appendChild(card);
+            });
+        }
+
+        // Quiz
+        class Quiz {
+            constructor(containerId, questions) {
+                this.container = document.getElementById(containerId);
+                this.questions = questions;
+                this.current = 0;
+                this.score = 0;
+                this.answered = false;
+                if (this.container && questions.length > 0) this.render();
+            }
+            render() {
+                const q = this.questions[this.current];
+                const pct = (this.current / this.questions.length) * 100;
+                this.container.innerHTML = `
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="flex-1 h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden"><div class="h-full bg-blue-600 progress-bar" style="width:${pct}%"></div></div>
+                        <span class="text-sm font-medium shrink-0">${this.score}/${this.questions.length}</span>
+                    </div>
+                    <p class="font-semibold mb-3">${this.current+1}. ${q.question}</p>
+                    <div class="space-y-2 mb-4">${q.options.map((o,i) => `<button class="quiz-option w-full text-left p-3 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm" data-idx="${i}">${o}</button>`).join('')}</div>
+                    <div id="quiz-feedback" class="text-sm mb-3 min-h-[1.5rem]"></div>
+                    <button id="quiz-next" class="hidden px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">Prossima →</button>
+                `;
+                this.bind();
+            }
+            bind() {
+                const opts = this.container.querySelectorAll('.quiz-option');
+                const next = this.container.querySelector('#quiz-next');
+                const fb = this.container.querySelector('#quiz-feedback');
+                opts.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        if (this.answered) return;
+                        this.answered = true;
+                        const s = parseInt(btn.dataset.idx);
+                        const c = this.questions[this.current].correct;
+                        opts.forEach(o => o.disabled = true);
+                        if (s === c) { this.score++; btn.classList.add('correct'); fb.innerHTML = '<span class="text-green-600 font-medium">✅ Corretto!</span>'; }
+                        else { btn.classList.add('incorrect'); opts[c].classList.add('correct'); fb.innerHTML = `<span class="text-red-600 font-medium">❌ Sbagliato. ${this.questions[this.current].explanation}</span>`; }
+                        if (this.current < this.questions.length - 1) next.classList.remove('hidden');
+                        else { next.textContent = 'Vedi risultato'; next.classList.remove('hidden'); }
+                    });
+                });
+                next.addEventListener('click', () => {
+                    if (this.current < this.questions.length - 1) { this.current++; this.answered = false; this.render(); }
+                    else this.showResults();
+                });
+            }
+            showResults() {
+                const pct = Math.round((this.score / this.questions.length) * 100);
+                const msgs = {90:'🏆 Eccellente!', 70:'👍 Buon lavoro!', 50:'📖 Sufficiente.', 0:'📚 Serve più studio.'};
+                const msg = Object.entries(msgs).find(([k]) => pct >= +k)?.[1] || msgs[0];
+                this.container.innerHTML = `
+                    <div class="text-center py-6">
+                        <p class="text-4xl font-bold mb-2">${this.score}/${this.questions.length}</p>
+                        <p class="text-lg mb-1">${pct}%</p>
+                        <p class="text-slate-500 mb-4">${msg}</p>
+                        <button onclick="location.reload()" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">Riprova</button>
+                    </div>`;
+            }
+        }
+
+        // TOC
+        function genTOC() {
+            const toc = document.getElementById('toc');
+            const secs = document.querySelectorAll('main section[id]');
+            secs.forEach(s => {
+                const a = document.createElement('a');
+                a.href = `#${s.id}`;
+                a.className = 'toc-link block px-3 py-1.5 rounded text-xs text-slate-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-slate-800';
+                a.textContent = s.querySelector('h2')?.textContent.replace(/^\d+\s*/, '') || s.id;
+                toc.appendChild(a);
+                // scroll spy
+                const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { document.querySelectorAll('.toc-link').forEach(l => l.classList.remove('active')); a.classList.add('active'); } }, {rootMargin:'-30% 0px -70% 0px'});
+                obs.observe(s);
+            });
+        }
+
+        // Intersection observer for slide-in
+        function initSlides() {
+            const obs = new IntersectionObserver((entries) => {
+                entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+            }, {threshold:0.1});
+            document.querySelectorAll('.slide-in').forEach(el => obs.observe(el));
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 't' && !e.target.matches('input,textarea')) toggleTheme();
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                const flipped = document.querySelector('.flashcard-3d:focus');
+                if (flipped) {
+                    const cards = Array.from(document.querySelectorAll('.flashcard-3d'));
+                    const idx = cards.indexOf(flipped);
+                    const next = e.key === 'ArrowRight' ? idx + 1 : idx - 1;
+                    if (cards[next]) { cards[next].focus(); cards[next].scrollIntoView({behavior:'smooth',block:'center'}); }
+                }
+            }
+        });
+
+        // Mermaid init
+        function initMermaid() {
+            document.querySelectorAll('.mermaid').forEach(el => { el.setAttribute('data-mermaid', el.innerHTML); });
+            mermaid.initialize({startOnLoad:true, theme: document.documentElement.classList.contains('dark') ? 'dark' : 'default', securityLevel:'loose'});
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme(); initMermaid(); renderFlashcards(); new Quiz('quiz-container', quizQuestions); genTOC(); initSlides();
+        });
+    </script>
+</body>
+</html>

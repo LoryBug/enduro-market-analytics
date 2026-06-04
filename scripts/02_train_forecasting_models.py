@@ -14,7 +14,7 @@ from src.plots import save_forecast_comparison, save_metrics_bar
 
 
 def load_series():
-    # Monthly is preferred when the historical coverage is short.
+    """Load the monthly market series (fallback to weekly if monthly unavailable)."""
     path = MONTHLY_SERIES if MONTHLY_SERIES.exists() else WEEKLY_SERIES
     if not path.exists():
         raise FileNotFoundError("Run scripts/01_preprocess.py before training models")
@@ -24,6 +24,7 @@ def load_series():
 
 
 def main():
+    """Train 4 forecasting models on the general market series, save metrics and plots."""
     OUTPUT_TABLES.mkdir(parents=True, exist_ok=True)
     OUTPUT_FIGURES.mkdir(parents=True, exist_ok=True)
 

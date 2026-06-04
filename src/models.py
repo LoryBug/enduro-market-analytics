@@ -12,6 +12,16 @@ except ImportError:  # Keeps the project executable when statsmodels is not inst
 
 
 def seasonal_naive_forecast(train_values, horizon, season_length=4):
+    """Baseline forecast: repeat the most recent seasonal pattern.
+
+    Args:
+        train_values: 1-D array of training target values.
+        horizon: Number of steps to forecast.
+        season_length: Length of the seasonal pattern to repeat.
+
+    Returns:
+        Array of forecast values.
+    """
     train_values = np.asarray(train_values, dtype=float)
     if len(train_values) >= season_length:
         pattern = train_values[-season_length:]
@@ -21,6 +31,19 @@ def seasonal_naive_forecast(train_values, horizon, season_length=4):
 
 
 def holt_winters_forecast(train_values, horizon, season_length=4):
+    """Holt-Winters exponential smoothing with additive trend and seasonality.
+
+    Falls back to simple exponential smoothing if statsmodels is unavailable
+    or if the series is too short. Falls back to seasonal naive on error.
+
+    Args:
+        train_values: 1-D array of training target values.
+        horizon: Number of steps to forecast.
+        season_length: Seasonal period length.
+
+    Returns:
+        Array of forecast values.
+    """
     train_values = np.asarray(train_values, dtype=float)
     if ExponentialSmoothing is None or SimpleExpSmoothing is None:
         return simple_exponential_smoothing_forecast(train_values, horizon)
@@ -43,6 +66,18 @@ def holt_winters_forecast(train_values, horizon, season_length=4):
 
 
 def simple_exponential_smoothing_forecast(train_values, horizon, alpha=0.35):
+    """Manual simple exponential smoothing fallback.
+
+    Used when statsmodels is not available.
+
+    Args:
+        train_values: 1-D array of training target values.
+        horizon: Number of steps to forecast.
+        alpha: Smoothing factor.
+
+    Returns:
+        Array of constant forecast values.
+    """
     train_values = np.asarray(train_values, dtype=float)
     level = train_values[0]
     for value in train_values[1:]:
@@ -51,6 +86,15 @@ def simple_exponential_smoothing_forecast(train_values, horizon, alpha=0.35):
 
 
 def train_random_forest(X_train, y_train):
+    """Train a Random Forest regressor with tuned hyperparameters.
+
+    Args:
+        X_train: Feature matrix for training.
+        y_train: Target vector for training.
+
+    Returns:
+        Fitted RandomForestRegressor.
+    """
     model = RandomForestRegressor(
         n_estimators=300,
         max_depth=8,
@@ -62,6 +106,18 @@ def train_random_forest(X_train, y_train):
 
 
 def train_mlp(X_train, y_train):
+    """Train an MLP regressor with StandardScaler pipeline.
+
+    Uses two hidden layers (32, 16), ReLU activation, Adam solver,
+    and early stopping.
+
+    Args:
+        X_train: Feature matrix for training.
+        y_train: Target vector for training.
+
+    Returns:
+        Fitted Pipeline (scaler + MLP).
+    """
     model = Pipeline(
         steps=[
             ("scaler", StandardScaler()),

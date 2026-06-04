@@ -17,12 +17,14 @@ FUTURE_END = "2026-12-31"
 
 
 def select_best_model(model_series):
+    """Evaluate models on a cluster and return the best one by RMSE."""
     metrics, _predictions, feature_cols = evaluate_cluster_models(model_series)
     metrics = metrics.sort_values("RMSE")
     return metrics.iloc[0]["model"], metrics.iloc[0].to_dict(), feature_cols
 
 
 def save_future_plot(recommendations):
+    """Save heatmap of future buy scores across clusters and months."""
     plot_df = recommendations.copy()
     plot_df["month_label"] = plot_df["period"].dt.strftime("%Y-%m")
     plot_df["cluster_label"] = plot_df["cluster_id"].str.replace("__", " / ")
@@ -49,6 +51,7 @@ def save_future_plot(recommendations):
 
 
 def main():
+    """Forecast future months per cluster, compute buy scores, and save recommendations."""
     OUTPUT_TABLES.mkdir(parents=True, exist_ok=True)
     OUTPUT_FIGURES.mkdir(parents=True, exist_ok=True)
     if not SERIES_PATH.exists():

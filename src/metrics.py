@@ -4,14 +4,45 @@ from math import comb
 
 
 def mae(y_true, y_pred):
+    """Mean Absolute Error.
+
+    Args:
+        y_true: Ground truth values.
+        y_pred: Predicted values.
+
+    Returns:
+        MAE as float.
+    """
     return float(np.mean(np.abs(np.asarray(y_true) - np.asarray(y_pred))))
 
 
 def rmse(y_true, y_pred):
+    """Root Mean Squared Error.
+
+    Penalises larger errors more heavily than MAE.
+
+    Args:
+        y_true: Ground truth values.
+        y_pred: Predicted values.
+
+    Returns:
+        RMSE as float.
+    """
     return float(np.sqrt(np.mean((np.asarray(y_true) - np.asarray(y_pred)) ** 2)))
 
 
 def mape(y_true, y_pred):
+    """Mean Absolute Percentage Error.
+
+    Ignores zero actual values to avoid division by zero.
+
+    Args:
+        y_true: Ground truth values.
+        y_pred: Predicted values.
+
+    Returns:
+        MAPE as a percentage float, or NaN if all actuals are zero.
+    """
     y_true = np.asarray(y_true, dtype=float)
     y_pred = np.asarray(y_pred, dtype=float)
     mask = y_true != 0
@@ -21,6 +52,15 @@ def mape(y_true, y_pred):
 
 
 def r2_score_manual(y_true, y_pred):
+    """Coefficient of determination (R²) computed manually.
+
+    Args:
+        y_true: Ground truth values.
+        y_pred: Predicted values.
+
+    Returns:
+        R² score as float, or NaN if total sum of squares is zero.
+    """
     y_true = np.asarray(y_true, dtype=float)
     y_pred = np.asarray(y_pred, dtype=float)
     ss_res = np.sum((y_true - y_pred) ** 2)
@@ -31,6 +71,16 @@ def r2_score_manual(y_true, y_pred):
 
 
 def regression_metrics(y_true, y_pred, model_name):
+    """Compute all four metrics (MAE, RMSE, MAPE, R²) in one dict.
+
+    Args:
+        y_true: Ground truth values.
+        y_pred: Predicted values.
+        model_name: Label for the model.
+
+    Returns:
+        Dict with keys 'model', 'MAE', 'RMSE', 'MAPE', 'R2'.
+    """
     return {
         "model": model_name,
         "MAE": mae(y_true, y_pred),
@@ -41,12 +91,33 @@ def regression_metrics(y_true, y_pred, model_name):
 
 
 def save_metrics(rows, path):
+    """Sort metrics by RMSE and save to CSV.
+
+    Args:
+        rows: List of metric dicts (from regression_metrics).
+        path: Output CSV path.
+
+    Returns:
+        Sorted DataFrame.
+    """
     df = pd.DataFrame(rows).sort_values("RMSE")
     df.to_csv(path, index=False)
     return df
 
 
 def exact_sign_test_p_value(wins_a, wins_b):
+    """Two-sided exact binomial sign test p-value.
+
+    Tests whether model A significantly outperforms model B based on
+    per-period absolute error comparisons.
+
+    Args:
+        wins_a: Number of periods where model A had lower error.
+        wins_b: Number of periods where model B had lower error.
+
+    Returns:
+        Two-sided p-value.
+    """
     n = int(wins_a + wins_b)
     if n == 0:
         return 1.0
@@ -56,6 +127,18 @@ def exact_sign_test_p_value(wins_a, wins_b):
 
 
 def compare_absolute_errors(predictions, actual_col="actual"):
+    """Pairwise model comparison via absolute errors and sign test.
+
+    For every pair of models, computes wins, ties, mean error difference,
+    and the sign test p-value.
+
+    Args:
+        predictions: DataFrame with 'period', actual_col, and model columns.
+        actual_col: Name of the column holding actual values.
+
+    Returns:
+        DataFrame with rows of pairwise comparisons sorted by p-value.
+    """
     model_cols = [col for col in predictions.columns if col not in {"period", actual_col}]
     rows = []
     actual = predictions[actual_col].to_numpy(dtype=float)
