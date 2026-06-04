@@ -49,11 +49,8 @@ La documentazione completa del progetto è nella cartella `docs/`:
 - `docs/cluster_prescriptive.md`: segmentazione età/km, forecast per cluster e raccomandazioni.
 - `docs/conclusions.md`: confronto finale, limiti e conclusione operativa.
 
-La dashboard statica resta disponibile in `report/index.html`.
-
 ## Output Principali
 
-- `report/index.html`: dashboard statica dei risultati.
 - `outputs/tables/metrics.csv`: confronto modelli sul mercato generale.
 - `outputs/tables/model_comparison_tests.csv`: confronto statistico pairwise degli errori dei modelli.
 - `outputs/tables/cluster_forecast_metrics.csv`: metriche dei forecast per cluster età/km.
@@ -80,5 +77,4 @@ scripts/         pipeline eseguibile
 src/             funzioni riutilizzabili per preprocessing, modelli, metriche e plot
 outputs/         tabelle e figure finali versionate
 docs/            note metodologiche
-report/          dashboard HTML finale
 ```
