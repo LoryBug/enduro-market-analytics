@@ -104,6 +104,8 @@ La pipeline produce anche `outputs/tables/seasonal_market_summary.csv`, che conf
 
 Nel dataset la stagione motociclistica ha più annunci ma prezzo mediano più basso. Questo è coerente con l'idea che nei mesi di utilizzo aumenti l'offerta disponibile, ma non implica automaticamente causalità: può dipendere anche dal diverso mix di annunci disponibili.
 
+![Riepilogo stagionale](img/14_seasonal_market_summary.png)
+
 ---
 
 ## 6. Perché La Mediana

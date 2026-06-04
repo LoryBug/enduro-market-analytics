@@ -5,7 +5,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.config import DATA_PROCESSED, OUTPUT_FIGURES, OUTPUT_TABLES, PROCESSED_LISTINGS, RAW_LISTINGS, WEEKLY_SERIES, MONTHLY_SERIES
-from src.plots import save_market_series_by_type, save_price_distribution, save_price_vs_age
+from src.plots import save_market_series_by_type, save_price_distribution, save_price_vs_age, save_seasonal_market_summary
 from src.preprocessing import build_monthly_market_series, build_seasonal_market_summary, build_weekly_market_series, clean_listings, load_raw_listings
 
 
@@ -34,6 +34,7 @@ def main():
     save_price_vs_age(clean, OUTPUT_FIGURES / "02_price_vs_age.png")
     save_market_series_by_type(clean, "price", "W", OUTPUT_FIGURES / "03_weekly_median_price.png")
     save_market_series_by_type(clean, "price", "M", OUTPUT_FIGURES / "04_monthly_median_price.png")
+    save_seasonal_market_summary(seasonal, OUTPUT_FIGURES / "14_seasonal_market_summary.png")
 
     print(f"Raw listings: {len(raw)}")
     print(f"Clean listings: {len(clean)}")

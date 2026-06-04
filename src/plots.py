@@ -136,6 +136,45 @@ def save_market_series_by_type(df, target, freq, path):
     plt.close(fig)
 
 
+def save_seasonal_market_summary(summary, path):
+    plot_df = summary.copy()
+    plot_df["label"] = plot_df["period_label"].replace(
+        {
+            "riding_season_apr_oct": "Riding\nApr-Oct",
+            "off_season_nov_mar": "Off-season\nNov-Mar",
+            "winter": "Winter",
+            "spring": "Spring",
+            "summer": "Summer",
+            "autumn": "Autumn",
+        }
+    )
+
+    fig, axes = plt.subplots(1, 2, figsize=(12, 5.2))
+    colors = ["#2563eb" if group == "riding_period" else "#f59e0b" for group in plot_df["group_type"]]
+
+    axes[0].bar(plot_df["label"], plot_df["listings_count"], color=colors)
+    axes[0].set_title("Listings by season")
+    axes[0].set_ylabel("Listings count")
+    axes[0].tick_params(axis="x", rotation=20)
+    axes[0].grid(axis="y", alpha=0.22)
+
+    axes[1].bar(plot_df["label"], plot_df["median_price"], color=colors)
+    axes[1].set_title("Median price by season")
+    axes[1].set_ylabel("Median price (EUR)")
+    axes[1].tick_params(axis="x", rotation=20)
+    axes[1].grid(axis="y", alpha=0.22)
+
+    for ax, value_col in zip(axes, ["listings_count", "median_price"]):
+        for idx, value in enumerate(plot_df[value_col]):
+            label = f"{value:,.0f}".replace(",", ".")
+            ax.text(idx, value, label, ha="center", va="bottom", fontsize=8.5)
+
+    fig.suptitle("Seasonal market summary")
+    fig.tight_layout()
+    fig.savefig(path, dpi=150)
+    plt.close(fig)
+
+
 def save_forecast_comparison(predictions, target, path):
     fig, ax = plt.subplots(figsize=(10, 5))
     ax.plot(predictions["period"], predictions["actual"], marker="o", label="Actual")
