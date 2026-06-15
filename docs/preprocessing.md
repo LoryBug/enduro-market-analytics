@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Preprocessing
-nav_order: 2
+nav_order: 3
 ---
 
 # Preprocessing Dei Dati
@@ -11,6 +11,8 @@ nav_order: 2
 Il preprocessing trasforma gli annunci grezzi in dataset puliti e serie temporali aggregabili. Lo script principale è `scripts/01_preprocess.py`, che usa le funzioni definite in `src/preprocessing.py`.
 
 L'obiettivo non è preparare un dataset per stimare il prezzo di una singola moto, ma costruire osservazioni temporali affidabili per il forecasting.
+
+La fase precedente di ingest è gestita dagli script `00_collect_wayback_moto.py` e `00_collect_live_moto.py`: il primo recupera snapshot storici tramite Wayback Machine, il secondo aggiunge osservazioni correnti. Il preprocessing parte dal raw consolidato `data/raw/enduro_listings_raw.csv`.
 
 ---
 
