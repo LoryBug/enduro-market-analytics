@@ -2,6 +2,8 @@
 
 Progetto di Operational Analytics sul mercato delle moto enduro usate. L'obiettivo non è stimare il prezzo di un singolo annuncio, ma costruire serie temporali aggregate e trasformarle in indicazioni operative di acquisto.
 
+Il progetto nasce da un problema pratico: stavo valutando l'acquisto di una moto da enduro usata e, nello stesso periodo, dovevo sviluppare un progetto per l'esame di Operational Analytics. Ho quindi trasformato una decisione personale in un caso analitico end-to-end: raccolta dati, preprocessing, forecasting e supporto alla scelta.
+
 ## Obiettivo
 
 Il progetto combina tre livelli di analisi:
@@ -21,6 +23,22 @@ data/raw/enduro_listings_raw.csv
 ```
 
 Il dataset raccoglie osservazioni storiche e correnti del mercato enduro in uno snapshot unico. Tutte le analisi derivano da questo file tramite preprocessing, aggregazione, forecasting e raccomandazione.
+
+## Data Ingestion
+
+La raccolta dati è separata dalla pipeline analitica per rendere il progetto riproducibile anche senza dipendere dalla rete o dalla disponibilità del sito sorgente.
+
+- `scripts/00_collect_wayback_moto.py`: interroga la CDX API di Internet Archive, recupera snapshot storici di pagine Moto.it tramite Wayback Machine e normalizza gli annunci in `data/raw/enduro_listings_wayback.csv`.
+- `scripts/00_collect_live_moto.py`: riusa lo stesso parser per acquisire pagine correnti di Moto.it e aggiungerle allo stesso file di raccolta.
+- `data/raw/enduro_listings_raw.csv`: snapshot consolidato e stabile usato dagli step finali `01-07`.
+
+In sintesi:
+
+```text
+Wayback Machine + Moto.it live -> raw collection -> raw consolidato -> preprocessing -> forecasting -> raccomandazioni
+```
+
+La raccolta via Wayback Machine permette di trasformare pagine archiviate nel tempo in osservazioni storiche del mercato, assegnando a ogni annuncio una `snapshot_date` coerente con la data dello snapshot.
 
 ## Pipeline
 

@@ -10,10 +10,12 @@ nav_order: 1
 
 Questo progetto analizza il mercato delle moto enduro usate con un obiettivo operativo: prevedere l'andamento del prezzo mediano e trasformare il forecast in indicazioni di acquisto.
 
+Il caso nasce da un'esigenza concreta: valutare l'acquisto di una moto da enduro usata e usare il progetto d'esame di Operational Analytics per costruire un processo decisionale basato sui dati, non su impressioni isolate.
+
 Il problema non viene trattato come regressione sul prezzo del singolo annuncio. La scelta principale è costruire una serie temporale aggregata:
 
 ```text
-annunci grezzi -> pulizia -> aggregazione mensile -> forecasting -> raccomandazione
+Wayback Machine + Moto.it live -> annunci grezzi -> pulizia -> aggregazione mensile -> forecasting -> raccomandazione
 ```
 
 Il progetto combina tre livelli di Operational Analytics:
@@ -43,6 +45,7 @@ Il dataset finale usato dalla pipeline è `data/raw/enduro_listings_raw.csv`.
 
 | File | Contenuto | Righe |
 |---|---|---:|
+| `data/raw/enduro_listings_wayback.csv` | Raccolta storica/live con campi di tracciabilità | 1590 |
 | `data/raw/enduro_listings_raw.csv` | Dataset di input della pipeline | 1930 |
 | `data/processed/enduro_listings_clean.csv` | Dataset pulito finale | 1891 |
 
@@ -53,7 +56,7 @@ Copertura temporale:
 | Settimanale | 262 | 2020-06 -> 2026-05 |
 | Mensile | 72 | 2020-06 -> 2026-05 |
 
-Tutte le osservazioni vengono trattate nello stesso modo. L'analisi si concentra sulla trasformazione degli annunci in serie temporali aggregate e raccomandazioni operative.
+La raccolta storica usa Wayback Machine per recuperare snapshot archiviati di pagine Moto.it, trasformandoli in osservazioni tabellari tramite parser HTML. Tutte le osservazioni consolidate vengono poi trattate nello stesso modo: l'analisi si concentra sulla trasformazione degli annunci in serie temporali aggregate e raccomandazioni operative.
 
 ---
 
@@ -69,6 +72,8 @@ La sequenza principale è:
 
 | Step | Script | Output principale |
 |---|---|---|
+| Ingest storico opzionale | `00_collect_wayback_moto.py` | raccolta Wayback Machine |
+| Ingest live opzionale | `00_collect_live_moto.py` | raccolta pagine correnti |
 | Preprocessing | `01_preprocess.py` | serie settimanale e mensile |
 | Forecast generale | `02_train_forecasting_models.py` | metriche e predizioni |
 | Raccomandazioni base | `03_buying_period_recommendation.py` | mesi convenienti sul mercato generale |
@@ -116,6 +121,7 @@ La lettura stagionale mostra inoltre che la stagione motociclistica aprile-ottob
 
 ## Contenuti
 
+- [Data Ingestion Con Wayback Machine](data_ingestion.md)
 - [Preprocessing Dei Dati](preprocessing.md)
 - [Forecasting Generale](forecasting.md)
 - [Cluster Età/Km E Raccomandazioni](cluster_prescriptive.md)

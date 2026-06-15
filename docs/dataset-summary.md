@@ -12,12 +12,31 @@ data/raw/enduro_listings_raw.csv
 
 | File | Contenuto | Righe |
 |---|---|---:|
+| `data/raw/enduro_listings_wayback.csv` | Raccolta storica/live da Moto.it con tracciabilità Wayback | 1590 |
 | `data/raw/enduro_listings_raw.csv` | Snapshot raw consolidato usato dalla pipeline | 1930 |
 | `data/processed/enduro_listings_clean.csv` | Dataset pulito derivato localmente | 1891 |
 
-Il dataset consolida osservazioni storiche e correnti del mercato enduro. Tutte le serie usate dalla pipeline vengono derivate localmente da questo file.
+Il dataset consolida osservazioni storiche e correnti del mercato enduro. La raccolta storica deriva da snapshot Moto.it recuperati tramite Wayback Machine, mentre lo snapshot finale `enduro_listings_raw.csv` è il punto di ingresso stabile della pipeline analitica.
 
-La colonna `snapshot_date` rappresenta il mese di osservazione del mercato ed e allineata alla fine del mese di `listing_date`.
+La colonna `snapshot_date` rappresenta il momento di osservazione del mercato: negli script di ingest coincide con la data dello snapshot Wayback o della raccolta live, mentre nel raw consolidato è allineata alla fine del mese di `listing_date`.
+
+## Ingest Storico
+
+La fase di ingest è documentata nello script `scripts/00_collect_wayback_moto.py` e produce `data/raw/enduro_listings_wayback.csv`.
+
+Flusso sintetico:
+
+```text
+target Moto.it -> Internet Archive CDX API -> snapshot Wayback -> parsing HTML -> CSV raw tracciabile
+```
+
+Campi di tracciabilità disponibili nel file di raccolta:
+
+- `url`: URL originale dell'annuncio;
+- `archive_url`: pagina Wayback da cui è stato estratto l'annuncio;
+- `source_page`: pagina target Moto.it usata per cercare gli snapshot.
+
+Questa fase è tenuta separata dalla pipeline finale perché richiede accesso a servizi esterni. Gli output analitici pubblicati vengono rigenerati a partire dal raw consolidato versionato.
 
 ## Versionamento
 
